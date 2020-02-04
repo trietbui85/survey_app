@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -79,6 +81,13 @@ dependencies {
     // Use annotationProcessor instead kapt which will cause compile error
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation("io.coil-kt:coil:0.9.3")
+    implementation 'me.relex:circleindicator:2.1.4'
+    // navigation component
+    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.2.0"
 
     implementation "com.google.code.gson:gson:2.8.6"
     implementation "com.squareup.retrofit2:retrofit:2.7.1"
