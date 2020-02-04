@@ -119,6 +119,7 @@ obj/
 .idea/dataSources.ids
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
+.idea/navEditor.xml
 .idea/uiDesigner.xml
 .idea/assetWizardSettings.xml
 # But keep dictionaries to have less false positives in spellcheck inspection.
