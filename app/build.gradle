@@ -8,7 +8,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.myapp"
+        applicationId "com.surveyapp"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -20,6 +20,25 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    productFlavors.whenObjectAdded { flavor ->
+        println('productFlavors of ${flavor}')
+        def flavorData = rootProject.ext[flavor.name]
+
+        flavor.applicationId flavorData.appId
+
+        flavor.buildConfigField 'String', strEndpointUrl, "\"" + flavorData.endpointUrl + "\""
+        flavor.buildConfigField 'String', strAccountGrantType, "\"" + flavorData.accountGrantType + "\""
+        flavor.buildConfigField 'String', strAccountDefaultUsername, "\"" + flavorData.accountDefaultUsername + "\""
+        flavor.buildConfigField 'String', strAccountDefaultPassword, "\"" + flavorData.accountDefaultPassword + "\""
+    }
+    flavorDimensions "environment"
+    productFlavors {
+        // Temporarily don't use FAKE flavor
+        // fake {}
+        dev {}
+        prod {}
     }
 }
 
