@@ -8,7 +8,7 @@ interface SurveyLocalDataSource {
     // Insert list of surveys into database
     suspend fun insertItems(items: List<SurveyEntity>)
 
-    // Get the list of surveys from database. Return empty if no data
+    // Get the list of surveys from database
     suspend fun loadAll(): List<SurveyEntity>
 
     // Delete all surveys in database
