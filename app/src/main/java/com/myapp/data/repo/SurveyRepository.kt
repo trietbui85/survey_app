@@ -4,6 +4,7 @@ import com.myapp.data.remote.SurveyRemoteDataSource
 import com.myapp.data.remote.model.SurveyResponse
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
 typealias ResultSurveys = Result<List<SurveyItem>>
 
@@ -11,7 +12,7 @@ interface SurveyRepository {
     suspend fun loadSurveys(pageNumber: Int, itemPerPage: Int): ResultSurveys
 }
 
-class SurveyRepositoryImpl(
+class SurveyRepositoryImpl @Inject constructor(
     private val surveyRemoteDataSource: SurveyRemoteDataSource,
     private val mapper: SurveyDataMapper
 ) : SurveyRepository {
