@@ -1,6 +1,6 @@
 # Thanks to https://github.com/coil-kt/coil/blob/master/.github/workflows/ci.yml
 
-name: CI
+name: CI for Build app
 on:
     push:
         branches:
@@ -24,8 +24,9 @@ jobs:
               with:
                   path: ~/.gradle/caches
                   key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
-
-            - name: Build
+            - name: Change Gradle wrapper permissions
+              run: chmod +x ./gradlew
+            - name: Clean and Build
               run: ./gradlew clean build
 
             #- name: Detekt
