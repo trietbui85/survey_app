@@ -3,7 +3,7 @@ package com.myapp.data.local
 import com.myapp.data.local.db.SurveyDatabase
 import com.myapp.data.local.db.SurveyEntity
 
-// DbDataSource is the interface to let repository interact with Database
+// DbDataSource is the interface to let repository interact with database
 interface SurveyLocalDataSource {
     // Insert list of surveys into database
     suspend fun insertItems(items: List<SurveyEntity>)
