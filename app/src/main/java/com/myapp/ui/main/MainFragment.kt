@@ -5,24 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.myapp.R
 import com.myapp.data.repo.SurveyItem
 import com.myapp.ui.detail.DetailFragment
 import com.utils.showToastLong
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.main_fragment.*
 import timber.log.Timber
+import javax.inject.Inject
 
-class MainFragment : Fragment() {
+class MainFragment : DaggerFragment() {
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModels<MainViewModel> { viewModelFactory }
 
     private lateinit var surveyAdapter: SurveyAdapter
 
@@ -35,7 +40,6 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         initViewAndAction()
 
@@ -43,14 +47,13 @@ class MainFragment : Fragment() {
     }
 
     private fun initLiveData() {
-        // TODO Listen for ViewModel.
+        viewModel.fetchSurveys(1)
     }
 
     private fun initViewAndAction() {
         ivRefresh.setOnClickListener {
             surveyAdapter.clearItems()
-            // TODO Force to re-fetch data
-            this.showToastLong("TODO: force re-fetch data")
+            viewModel.fetchSurveys(1, true)
         }
         ivMenu.setOnClickListener {
             // No action for Menu More, thus just show a Toast
@@ -70,7 +73,7 @@ class MainFragment : Fragment() {
                 super.onPageSelected(position)
                 Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
                 if (position == surveyAdapter.itemCount - 1) {
-                    // TODO Prefetch data for next page
+                    viewModel.loadNextPage()
                 }
             }
         })
