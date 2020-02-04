@@ -2,19 +2,18 @@ package com.myapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.myapp.R
-import com.myapp.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
-        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.navigation_host).navigateUp() || super.onSupportNavigateUp()
     }
 
 }
