@@ -26,7 +26,7 @@ class NetworkModule {
     @Singleton
     @Provides
     @Named("NumOfItemPerPage")
-    fun providerNumOfItemPerPage(): Int = 10
+    fun providerNumOfItemPerPage(): Int = 5
 
     @Singleton
     @Provides
