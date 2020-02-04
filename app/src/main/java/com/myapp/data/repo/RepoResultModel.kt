@@ -1,5 +1,36 @@
 package com.myapp.data.repo
 
+
+/**
+ * A generic class that holds a value with its loading status.
+ *
+ * Result is usually created by the Repository classes where they return
+ * `LiveData<Result<T>>` to pass back the latest data to the UI with its fetch status.
+ */
+
+data class Result<out T>(val status: Status, val data: T?, val exception: DataException?) {
+
+    enum class Status {
+        SUCCESS,
+        ERROR,
+        LOADING
+    }
+
+    companion object {
+        fun <T> success(data: T): Result<T> {
+            return Result(Status.SUCCESS, data, null)
+        }
+
+        fun <T> error(exception: DataException): Result<T> {
+            return Result(Status.ERROR, null, exception)
+        }
+
+        fun <T> loading(data: T? = null): Result<T> {
+            return Result(Status.LOADING, data, null)
+        }
+    }
+}
+
 // This class is used to handle exception when parse data from network
 data class DataException(val httpCode: Int, val errorMessage: String) :
     Exception(errorMessage) {
