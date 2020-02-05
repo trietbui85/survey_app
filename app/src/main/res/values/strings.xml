@@ -11,4 +11,10 @@
     <string name="survey_details_invalid">Invalid survey data</string>
     <string name="menu_more">Open More menu</string>
 
+    <!-- Error message for network or connection-->
+    <string name="error_server">Server error</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_connection">Cannot connect to server</string>
+    <string name="error_parse">Failed to parse data</string>
+
 </resources>
