@@ -26,6 +26,9 @@ class AccountRepositoryImplTest {
     private val tokenResponse = AccessTokenResponse(
         accessToken = "token_data"
     )
+    private val tokenItem = AccessTokenItem(
+        accessToken = "token_data"
+    )
 
     @Before
     fun setUp() {
@@ -47,12 +50,15 @@ class AccountRepositoryImplTest {
     fun refreshToken_HappyCase() {
         runBlocking {
             whenever(remoteDataSource.refreshAccessToken()) doReturn tokenResponse
+            whenever(mapper.fromAccessTokenResponse(tokenResponse)) doReturn tokenItem
+            whenever(mapper.toAccessTokenEntity(tokenItem)) doReturn tokenEntity
 
             accountRepository.refreshToken()
 
             verify(localDataSource).removeTokenFromCache()
             verify(mapper).fromAccessTokenResponse(tokenResponse)
-//            verify(localDataSource).saveTokenToCache()
+            verify(mapper).toAccessTokenEntity(tokenItem)
+            verify(localDataSource).saveTokenToCache(tokenEntity)
         }
     }
 }
