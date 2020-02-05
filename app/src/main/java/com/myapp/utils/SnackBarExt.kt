@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.myapp.utils
 
 import android.view.View

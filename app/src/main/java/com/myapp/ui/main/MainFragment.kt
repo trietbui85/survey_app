@@ -14,8 +14,8 @@ import com.myapp.R
 import com.myapp.data.repo.Result
 import com.myapp.data.repo.SurveyItem
 import com.myapp.ui.detail.DetailFragment
-import com.utils.getErrorText
-import com.utils.showToastLong
+import com.myapp.utils.getErrorText
+import com.myapp.utils.showToastLong
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.main_fragment.*
 import timber.log.Timber

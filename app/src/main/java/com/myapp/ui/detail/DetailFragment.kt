@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.myapp.R
 import com.myapp.data.repo.SurveyItem
-import com.utils.showToastLong
+import com.myapp.utils.showToastLong
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.detail_fragment.*
 import javax.inject.Inject
@@ -54,7 +54,7 @@ class DetailFragment : DaggerFragment() {
         if (surveyItem == null) {
             this.showToastLong(R.string.survey_details_invalid)
             goBack()
-            return;
+            return
         }
 
         tvContent.text = surveyItem.title

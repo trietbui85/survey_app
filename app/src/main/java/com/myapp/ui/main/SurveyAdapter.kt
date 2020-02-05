@@ -10,7 +10,7 @@ import com.myapp.data.repo.SurveyItem
 import com.myapp.utils.getHighResImageUrl
 import kotlinx.android.synthetic.main.item_survey.view.*
 
-class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
+class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
     RecyclerView.Adapter<PagerVH>() {
 
     private var surveyItems = mutableListOf<SurveyItem>()

@@ -30,6 +30,28 @@ android {
             }
         }
     }
+
+    lintOptions {
+        // If set to true, turns off analysis progress reporting by lint.
+        // quiet true
+        // if set to true (default), stops the build if errors are found.
+        abortOnError true
+        // if true, only report errors.
+        ignoreWarnings true
+        lintConfig file('lint.xml')
+    }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude '.readme'
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -102,7 +124,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.3.1"
 
     // Dagger
-    def dagger_version = "2.23.2"
+    def dagger_version = "2.26"
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
@@ -113,6 +135,9 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:4.7.1"
 
+    // Note: DON'T upgrade JUnit to v4.13 - it will cause error "Unresolved reference: Test" in
+    // test file although these test cases can still be run
+    //noinspection GradleDependency
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
