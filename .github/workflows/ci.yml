@@ -1,33 +1,33 @@
 # Thanks to https://github.com/coil-kt/coil/blob/master/.github/workflows/ci.yml
 
-name: CI for Build app
+name: CI for Build & Test app
 on:
-    push:
-        branches:
-            - development
-    pull_request:
+  push:
+    branches:
+      - development
+  pull_request:
 jobs:
-    ci:
-        name: Build + Test flavor DEV
-        runs-on: [ubuntu-latest]
-        steps:
-            - uses: actions/checkout@v2
+  ci:
+    name: Build + Test flavor DEV
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
 
-            # Ensure .gradle/caches is empty before writing to it.
-            # This helps us stay within Github's cache size limits.
-            - name: Clean Cache
-              run: rm -rf ~/.gradle/caches
+      # Ensure .gradle/caches is empty before writing to it.
+      # This helps us stay within Github's cache size limits.
+      - name: Clean Cache
+        run: rm -rf ~/.gradle/caches
 
-            # Restore the cache.
-            # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
-            - uses: actions/cache@v1
-              with:
-                  path: ~/.gradle/caches
-                  key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
-            - name: Change Gradle wrapper permissions
-              run: chmod +x ./gradlew
-            - name: Clean and Build flavor DEV
-              run: ./gradlew clean assembleDevDebug
+      # Restore the cache.
+      # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }} }}
+      - name: Change Gradle wrapper permissions
+        run: chmod +x ./gradlew
+      - name: Clean and Build flavor DEV
+        run: ./gradlew clean assembleDevDebug
 
-            #- name: Detekt
-            #  run: ./gradlew detekt
+      #- name: Detekt
+      #  run: ./gradlew detekt
