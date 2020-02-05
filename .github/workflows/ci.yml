@@ -29,7 +29,7 @@ jobs:
       - name: Clean and Build flavor DEV-debug
         run: ./gradlew clean assembleDevDebug --stacktrace
       - name: Run lint for flavor DEV-debug
-        run: ./gradlew clean assembleDevDebug --stacktrace
+        run: ./gradlew lintDevDebug --stacktrace
       - name: Run local unit test for flavor DEV-debug
         run: ./gradlew testDevDebugUnitTest --stacktrace
 
