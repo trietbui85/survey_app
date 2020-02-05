@@ -43,6 +43,7 @@ class MainFragment : DaggerFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("onCreate(): viewModel.fetchSurveys(1)")
         viewModel.fetchSurveys(1)
     }
 
@@ -81,7 +82,9 @@ class MainFragment : DaggerFragment() {
                     if (it.data.isNullOrEmpty()) {
                         this.showToastLong(R.string.no_surveys)
                     } else {
+                        // TODO Need to restore previous selected position for indicator
                         surveyAdapter.setItems(it.data.orEmpty())
+
                         indicator.setViewPager(viewPager)
                     }
                 }
