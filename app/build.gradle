@@ -52,6 +52,10 @@ android {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
 
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -139,11 +143,20 @@ dependencies {
     // test file although these test cases can still be run
     //noinspection GradleDependency
     testImplementation 'junit:junit:4.12'
+    // Room test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation 'org.robolectric:robolectric:4.3.1'
+    // Optional -- Robolectric environment
+    testImplementation "androidx.test:core:1.2.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation "org.mockito:mockito-core:3.2.4"
+    testImplementation 'com.google.truth:truth:1.0.1'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // Room test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
