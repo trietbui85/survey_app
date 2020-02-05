@@ -19,6 +19,7 @@ class MainViewModel @Inject constructor(
         liveData {
             emit(Result.loading(null))
             val data = surveyRepository.loadSurveys(_pageNumberLiveData.value!!, numOfItemPerPage)
+            // FIXME In case ResultError, must revert to previous page number
             emit(data)
         }
     }
