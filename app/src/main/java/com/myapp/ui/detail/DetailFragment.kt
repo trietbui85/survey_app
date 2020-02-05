@@ -54,7 +54,7 @@ class DetailFragment : DaggerFragment() {
         if (surveyItem == null) {
             this.showToastLong(R.string.survey_details_invalid)
             goBack()
-            return;
+            return
         }
 
         tvContent.text = surveyItem.title
