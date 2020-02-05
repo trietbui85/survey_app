@@ -1,4 +1,4 @@
-package com.utils
+package com.myapp.utils
 
 import android.content.Context
 import com.myapp.R
