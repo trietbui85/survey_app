@@ -135,6 +135,9 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:4.7.1"
 
+    // Note: DON'T upgrade JUnit to v4.13 - it will cause error "Unresolved reference: Test" in
+    // test file although these test cases can still be run
+    //noinspection GradleDependency
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
