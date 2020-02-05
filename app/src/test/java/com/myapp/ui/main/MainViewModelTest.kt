@@ -39,9 +39,10 @@ class MainViewModelTest {
         val result: ResultSurveys = com.myapp.data.repo.Result.success(surveys)
         whenever(surveyRepository.loadSurveys(1, 1)) doReturn result
 
+        viewModel.fetchSurveys(1)
         viewModel.surveyLiveData.getOrAwaitValue().let {
             assertThat(it).isNotNull()
-            assertThat(it).isEqualTo(result)
+            assertThat(it).isEqualTo(com.myapp.data.repo.Result.loading(null))
         }
     }
 
