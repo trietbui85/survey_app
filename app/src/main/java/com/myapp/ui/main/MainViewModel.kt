@@ -4,13 +4,16 @@ import androidx.lifecycle.*
 import com.myapp.data.repo.Result
 import com.myapp.data.repo.ResultSurveys
 import com.myapp.data.repo.SurveyRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
 class MainViewModel @Inject constructor(
     private val surveyRepository: SurveyRepository,
-    @Named("NumOfItemPerPage") private val numOfItemPerPage: Int
+    @Named("NumOfItemPerPage") private val numOfItemPerPage: Int,
+    @Named("MainDispatcher") private val mainDispatcher: CoroutineDispatcher,
+    @Named("IoDispatcher") private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _pageNumberLiveData = MutableLiveData<Int>()
