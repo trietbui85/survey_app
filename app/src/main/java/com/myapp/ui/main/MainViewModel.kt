@@ -8,6 +8,7 @@ import com.myapp.data.repo.DataException
 import com.myapp.data.repo.Result
 import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
+import com.myapp.utils.CollectionUtils.merge2List
 import com.myapp.utils.LiveEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -28,14 +29,14 @@ class MainViewModel @Inject constructor(
     // Pair<Boolean, Boolean> mean <IsLoading, IsFirstPage>
     private val _loadingLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
     private val _errorLiveEvent = MutableLiveData<LiveEvent<DataException>>()
-    private val _contentLiveData = MutableLiveData<List<SurveyItem>>(emptyList())
+    private val _contentLiveData = MutableLiveData<MutableList<SurveyItem>>()
     // -1 mean invalid index, because the ViewPager will have the 0-based index
     private val _pageIndexLiveData = MutableLiveData(-1)
 
     val pageIndexLiveData: LiveData<Int>
         get() = _pageIndexLiveData
 
-    val contentLiveData: LiveData<List<SurveyItem>>
+    val contentLiveData: LiveData<MutableList<SurveyItem>>
         get() = _contentLiveData
 
     val loadingLiveData: LiveData<Pair<Boolean, Boolean>>
@@ -58,7 +59,8 @@ class MainViewModel @Inject constructor(
                         "There are ${_contentLiveData.value?.size} existing items, " +
                                 "and ${result.data?.size} new items"
                     )
-                    val allItems = _contentLiveData.value?.toMutableList()?.also {
+                    val allItems = merge2List(_contentLiveData.value, result.data)
+                    (_contentLiveData.value ?: mutableListOf()).toMutableList().also {
                         it.addAll(result.data?.toMutableList().orEmpty())
                     }
                     _contentLiveData.value = allItems
@@ -74,7 +76,7 @@ class MainViewModel @Inject constructor(
             forceReload || pageNumber == 1 -> {
                 // If force reload, will clear the list content
                 _currentPage = 1
-                _contentLiveData.value = emptyList()
+//                _contentLiveData.value = emptyList()
                 _pageIndexLiveData.value = -1
 
                 fetchSurveysForPage(1)

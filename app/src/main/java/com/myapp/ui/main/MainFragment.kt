@@ -59,7 +59,7 @@ class MainFragment : DaggerFragment() {
             Timber.d("viewModel.contentLiveData: success: $it")
             viewLoadMore.visibility = View.INVISIBLE
             viewLoadingFullScreen.visibility = View.INVISIBLE
-            surveyAdapter.setItems(it.orEmpty())
+            surveyAdapter.setItems(it!!)
 
 
             val pagerIndex = viewModel.pageIndexLiveData.value ?: -1
@@ -118,8 +118,6 @@ class MainFragment : DaggerFragment() {
                 findNavController().navigate(R.id.action_mainFragment_to_detailFragment, bundle)
             }
         })
-
-        surveyAdapter.setItems(emptyList())
 
         viewPager.adapter = surveyAdapter
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

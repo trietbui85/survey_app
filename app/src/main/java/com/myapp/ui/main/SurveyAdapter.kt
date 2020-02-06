@@ -34,8 +34,8 @@ class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
         }
     }
 
-    fun setItems(list: List<SurveyItem>) {
-        this.surveyItems = list.toMutableList()
+    fun setItems(list: MutableList<SurveyItem>) {
+        this.surveyItems = list
         notifyDataSetChanged()
     }
 
