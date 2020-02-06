@@ -29,6 +29,11 @@ class MainViewModel @Inject constructor(
     private val _loadingLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
     private val _errorLiveEvent = MutableLiveData<LiveEvent<DataException>>()
     private val _contentLiveData = MutableLiveData<List<SurveyItem>>(emptyList())
+    // -1 mean invalid index, because the ViewPager will have the 0-based index
+    private val _pageIndexLiveData = MutableLiveData(-1)
+
+    val pageIndexLiveData: LiveData<Int>
+        get() = _pageIndexLiveData
 
     val contentLiveData: LiveData<List<SurveyItem>>
         get() = _contentLiveData
@@ -70,6 +75,8 @@ class MainViewModel @Inject constructor(
                 // If force reload, will clear the list content
                 _currentPage = 1
                 _contentLiveData.value = emptyList()
+                _pageIndexLiveData.value = -1
+
                 fetchSurveysForPage(1)
             }
             pageNumber != _currentPage -> {
@@ -88,4 +95,7 @@ class MainViewModel @Inject constructor(
         fetchSurveys(nextPage)
     }
 
+    fun setViewPagerSelectedIndex(pageIndex: Int) {
+        _pageIndexLiveData.value = pageIndex
+    }
 }

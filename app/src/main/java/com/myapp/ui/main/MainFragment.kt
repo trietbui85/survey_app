@@ -61,6 +61,13 @@ class MainFragment : DaggerFragment() {
             viewLoadingFullScreen.visibility = View.INVISIBLE
             surveyAdapter.setItems(it.orEmpty())
 
+
+            val pagerIndex = viewModel.pageIndexLiveData.value ?: -1
+            Timber.d("Restore ViewPager index to $pagerIndex")
+            if (pagerIndex >= 0) {
+                viewPager.setCurrentItem(pagerIndex, false)
+            }
+
             indicator.setViewPager(viewPager)
         })
 
@@ -119,11 +126,13 @@ class MainFragment : DaggerFragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
+                viewModel.setViewPagerSelectedIndex(position)
                 if (position == surveyAdapter.itemCount - 1) {
                     viewModel.loadNextPage()
                 }
             }
         })
+
     }
 
     interface OpenDetailCallback {
