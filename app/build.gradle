@@ -152,6 +152,8 @@ dependencies {
 
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "org.mockito:mockito-core:3.2.4"
+    // Use mockk v1.9.3 instead 1.9.3.kotlin12
+    testImplementation "io.mockk:mockk:1.9.3"
 
     def androidX_core_test_version = "2.1.0"
     testImplementation "androidx.arch.core:core-testing:$androidX_core_test_version"
