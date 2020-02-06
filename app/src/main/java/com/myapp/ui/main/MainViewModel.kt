@@ -76,7 +76,7 @@ class MainViewModel @Inject constructor(
             forceReload || pageNumber == 1 -> {
                 // If force reload, will clear the list content
                 _currentPage = 1
-//                _contentLiveData.value = emptyList()
+                _contentLiveData.value = mutableListOf()
                 _pageIndexLiveData.value = -1
 
                 fetchSurveysForPage(1)

@@ -1,48 +1,94 @@
 package com.myapp.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.common.truth.Truth.assertThat
-import com.myapp.data.repo.ResultSurveys
+import androidx.lifecycle.Observer
+import com.myapp.data.repo.DataException
 import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
-import com.myapp.rule.CoroutineTestRule
-import com.myapp.utils.getOrAwaitValue
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import com.myapp.utils.LiveEvent
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.verifySequence
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+
 
 @ExperimentalCoroutinesApi
+@RunWith(JUnit4::class)
 class MainViewModelTest {
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule()
 
+    // Run tasks synchronously
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val surveyRepository: SurveyRepository = mock()
+    private val surveyRepository: SurveyRepository = mockk(relaxed = true)
 
     private lateinit var viewModel: MainViewModel
 
+    private val dispatcher = Dispatchers.Unconfined
+
+    private val surveys = mutableListOf(SurveyItem("id 1"), SurveyItem("id 2"))
+    private val dataException = DataException(404, "Page not found")
+    private val resultSuccess = com.myapp.data.repo.Result.success(surveys)
+    private val resultError = com.myapp.data.repo.Result.error<List<SurveyItem>>(dataException)
+
     @Before
     fun setUp() {
-        viewModel = MainViewModel(surveyRepository, 5)
+        MockKAnnotations.init(this)
+        viewModel = MainViewModel(surveyRepository, 5, dispatcher, dispatcher)
     }
 
     @Test
-    fun fetchSurveys() = runBlockingTest {
-        val surveys: List<SurveyItem> = listOf(SurveyItem("id 1"), SurveyItem("id 2"))
-        val result: ResultSurveys = com.myapp.data.repo.Result.success(surveys)
-        whenever(surveyRepository.loadSurveys(1, 1)) doReturn result
+    fun fetchSurveys_FirstPageAndSuccess_ThenWithTheseResults() = runBlocking {
+        val pageNumber = 1
+        val isFullscreen = pageNumber == 1
+        coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultSuccess
 
-        viewModel.fetchSurveys(1)
-        viewModel.surveyLiveData.getOrAwaitValue().let {
-            assertThat(it).isNotNull()
-            assertThat(it).isEqualTo(com.myapp.data.repo.Result.loading(null))
+        val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
+        viewModel.loadingLiveData.observeForever(loadingObserver)
+
+        val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
+        viewModel.contentLiveData.observeForever(contentObserver)
+
+        viewModel.fetchSurveys(pageNumber)
+
+        verifySequence {
+            contentObserver.onChanged(mutableListOf()) // reset when load first page
+            loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+            contentObserver.onChanged(resultSuccess.data)
+            loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+        }
+    }
+
+    @Test
+    fun fetchSurveys_FirstPageAndFailed_ThenWithTheseResults() = runBlocking {
+        val pageNumber = 1
+        val isFullscreen = pageNumber == 1
+        coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultError
+
+        val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
+        viewModel.loadingLiveData.observeForever(loadingObserver)
+
+        val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
+        viewModel.contentLiveData.observeForever(contentObserver)
+
+        val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
+        viewModel.errorLiveEvent.observeForever(errorObserver)
+
+        viewModel.fetchSurveys(pageNumber)
+
+        verifySequence {
+            contentObserver.onChanged(mutableListOf()) // reset when load first page
+            loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+            errorObserver.onChanged(LiveEvent(resultError.exception!!))
+            loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
     }
 
