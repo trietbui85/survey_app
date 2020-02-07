@@ -14,51 +14,51 @@ import org.junit.Test
 
 class AccountRepositoryImplTest {
 
-    private val remoteDataSource: TokenRemoteDataSource = mock()
-    private val localDataSource: TokenLocalDataSource = mock()
-    private val mapper: AccountDataMapper = mock()
+  private val remoteDataSource: TokenRemoteDataSource = mock()
+  private val localDataSource: TokenLocalDataSource = mock()
+  private val mapper: AccountDataMapper = mock()
 
-    private lateinit var accountRepository: AccountRepositoryImpl
+  private lateinit var accountRepository: AccountRepositoryImpl
 
-    private val tokenEntity = AccessTokenEntity(
-        accessToken = "token_data"
-    )
-    private val tokenResponse = AccessTokenResponse(
-        accessToken = "token_data"
-    )
-    private val tokenItem = AccessTokenItem(
-        accessToken = "token_data"
-    )
+  private val tokenEntity = AccessTokenEntity(
+      accessToken = "token_data"
+  )
+  private val tokenResponse = AccessTokenResponse(
+      accessToken = "token_data"
+  )
+  private val tokenItem = AccessTokenItem(
+      accessToken = "token_data"
+  )
 
-    @Before
-    fun setUp() {
-        accountRepository = AccountRepositoryImpl(remoteDataSource, localDataSource, mapper)
+  @Before
+  fun setUp() {
+    accountRepository = AccountRepositoryImpl(remoteDataSource, localDataSource, mapper)
+  }
+
+  @Test
+  fun getTokenFromCache_HappyCase() {
+    runBlocking {
+      whenever(localDataSource.loadTokenFromCache()) doReturn tokenEntity
+      accountRepository.getTokenFromCache()
+
+      verify(localDataSource).loadTokenFromCache()
+      verify(mapper).fromAccessTokenEntity(tokenEntity)
     }
+  }
 
-    @Test
-    fun getTokenFromCache_HappyCase() {
-        runBlocking {
-            whenever(localDataSource.loadTokenFromCache()) doReturn tokenEntity
-            accountRepository.getTokenFromCache()
+  @Test
+  fun refreshToken_HappyCase() {
+    runBlocking {
+      whenever(remoteDataSource.refreshAccessToken()) doReturn tokenResponse
+      whenever(mapper.fromAccessTokenResponse(tokenResponse)) doReturn tokenItem
+      whenever(mapper.toAccessTokenEntity(tokenItem)) doReturn tokenEntity
 
-            verify(localDataSource).loadTokenFromCache()
-            verify(mapper).fromAccessTokenEntity(tokenEntity)
-        }
+      accountRepository.refreshToken()
+
+      verify(localDataSource).removeTokenFromCache()
+      verify(mapper).fromAccessTokenResponse(tokenResponse)
+      verify(mapper).toAccessTokenEntity(tokenItem)
+      verify(localDataSource).saveTokenToCache(tokenEntity)
     }
-
-    @Test
-    fun refreshToken_HappyCase() {
-        runBlocking {
-            whenever(remoteDataSource.refreshAccessToken()) doReturn tokenResponse
-            whenever(mapper.fromAccessTokenResponse(tokenResponse)) doReturn tokenItem
-            whenever(mapper.toAccessTokenEntity(tokenItem)) doReturn tokenEntity
-
-            accountRepository.refreshToken()
-
-            verify(localDataSource).removeTokenFromCache()
-            verify(mapper).fromAccessTokenResponse(tokenResponse)
-            verify(mapper).toAccessTokenEntity(tokenItem)
-            verify(localDataSource).saveTokenToCache(tokenEntity)
-        }
-    }
+  }
 }

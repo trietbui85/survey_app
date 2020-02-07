@@ -1,20 +1,20 @@
 <resources>
-    <string name="app_name">SurveyApp</string>
+  <string name="app_name">SurveyApp</string>
 
-    <string name="title_surveys_list">SurveyApp</string>
+  <string name="title_surveys_list">SurveyApp</string>
 
-    <string name="take_the_survey">Take the survey</string>
-    <string name="title_survey_details">Survey Details</string>
-    <string name="load_next_page">Load next page</string>
-    <string name="no_surveys">No survey found! Please try again.</string>
-    <string name="fetching_surveys">Fetching surveys…</string>
-    <string name="survey_details_invalid">Invalid survey data</string>
-    <string name="menu_more">Open More menu</string>
+  <string name="take_the_survey">Take the survey</string>
+  <string name="title_survey_details">Survey Details</string>
+  <string name="load_next_page">Load next page</string>
+  <string name="no_surveys">No survey found! Please try again.</string>
+  <string name="fetching_surveys">Fetching surveys…</string>
+  <string name="survey_details_invalid">Invalid survey data</string>
+  <string name="menu_more">Open More menu</string>
 
-    <!-- Error message for network or connection-->
-    <string name="error_server">Server error</string>
-    <string name="error_unknown">Unknown error</string>
-    <string name="error_connection">Cannot connect to server</string>
-    <string name="error_parse">Failed to parse data</string>
+  <!-- Error message for network or connection-->
+  <string name="error_server">Server error</string>
+  <string name="error_unknown">Unknown error</string>
+  <string name="error_connection">Cannot connect to server</string>
+  <string name="error_parse">Failed to parse data</string>
 
 </resources>

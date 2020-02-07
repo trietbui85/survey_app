@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="IconMissingDensityFolder" severity="warning" />
-    <issue id="HardcodedText" severity="warning" />
+  <issue id="IconMissingDensityFolder" severity="warning" />
+  <issue id="HardcodedText" severity="warning" />
 
-    <!-- In this sample app, we don't need to add description for image-->
-    <issue id="ContentDescription" severity="ignore" />
+  <!-- In this sample app, we don't need to add description for image-->
+  <issue id="ContentDescription" severity="ignore" />
 
-    <!-- Unused resources can be removed later, just show its information instead warning-->
-    <issue id="UnusedResources" severity="informational" />
+  <!-- Unused resources can be removed later, just show its information instead warning-->
+  <issue id="UnusedResources" severity="informational" />
 
-    <!-- In this sample app, we don't support for RTL language yet, so it's safe to ignore -->
-    <issue id="RtlHardcoded" severity="ignore" />
-    <issue id="RtlCompat" severity="ignore" />
-    <issue id="RtlEnabled" severity="ignore" />
+  <!-- In this sample app, we don't support for RTL language yet, so it's safe to ignore -->
+  <issue id="RtlHardcoded" severity="ignore" />
+  <issue id="RtlCompat" severity="ignore" />
+  <issue id="RtlEnabled" severity="ignore" />
 
 </lint>

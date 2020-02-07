@@ -25,24 +25,24 @@ import androidx.lifecycle.Observer
  */
 data class LiveEvent<out T>(private val content: T) {
 
-    private var hasBeenHandled = false
+  private var hasBeenHandled = false
 
-    /**
-     * Returns the content and prevents its use again.
-     */
-    fun getContentIfNotHandled(): T? {
-        return if (hasBeenHandled) {
-            null
-        } else {
-            hasBeenHandled = true
-            content
-        }
+  /**
+   * Returns the content and prevents its use again.
+   */
+  fun getContentIfNotHandled(): T? {
+    return if (hasBeenHandled) {
+      null
+    } else {
+      hasBeenHandled = true
+      content
     }
+  }
 
-    /**
-     * Returns the content, even if it's already been handled.
-     */
-    fun peekContent(): T = content
+  /**
+   * Returns the content, even if it's already been handled.
+   */
+  fun peekContent(): T = content
 
 }
 
@@ -53,9 +53,10 @@ data class LiveEvent<out T>(private val content: T) {
  * [onEventUnhandledContent] is *only* called if the [Event]'s contents has not been handled.
  */
 class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<LiveEvent<T>> {
-    override fun onChanged(event: LiveEvent<T>?) {
-        event?.getContentIfNotHandled()?.let { value ->
-            onEventUnhandledContent(value)
+  override fun onChanged(event: LiveEvent<T>?) {
+    event?.getContentIfNotHandled()
+        ?.let { value ->
+          onEventUnhandledContent(value)
         }
-    }
+  }
 }

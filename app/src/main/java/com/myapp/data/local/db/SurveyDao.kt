@@ -8,12 +8,12 @@ import androidx.room.Query
 @Dao
 interface SurveyDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertItems(items: List<SurveyEntity>)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insertItems(items: List<SurveyEntity>)
 
-    @Query("SELECT * FROM survey")
-    suspend fun loadAll(): List<SurveyEntity>
+  @Query("SELECT * FROM survey")
+  suspend fun loadAll(): List<SurveyEntity>
 
-    @Query("DELETE FROM survey")
-    suspend fun deleteAll()
+  @Query("DELETE FROM survey")
+  suspend fun deleteAll()
 }

@@ -23,79 +23,83 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
-    @Singleton
-    @Provides
-    @Named("NumOfItemPerPage")
-    fun providerNumOfItemPerPage(): Int = 5
+  @Singleton
+  @Provides
+  @Named("NumOfItemPerPage")
+  fun providerNumOfItemPerPage(): Int = 5
 
-    @Singleton
-    @Provides
-    @Named("EndpointUrl")
-    fun providerEndpointUrl(): String = BuildConfig.ENDPOINT_URL
+  @Singleton
+  @Provides
+  @Named("EndpointUrl")
+  fun providerEndpointUrl(): String = BuildConfig.ENDPOINT_URL
 
-    @Singleton
-    @Provides
-    fun provideSurveyApiService(
-        gson: Gson,
-        @Named("SurveyHttpClient") okHttpClient: OkHttpClient,
-        @Named("EndpointUrl") endpointUrl: String
-    ): SurveyApiService {
-        return Retrofit.Builder()
-            .baseUrl(endpointUrl)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient)
-            .build()
-            .create(SurveyApiService::class.java)
+  @Singleton
+  @Provides
+  fun provideSurveyApiService(
+    gson: Gson,
+    @Named("SurveyHttpClient") okHttpClient: OkHttpClient,
+    @Named("EndpointUrl") endpointUrl: String
+  ): SurveyApiService {
+    return Retrofit.Builder()
+        .baseUrl(endpointUrl)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(okHttpClient)
+        .build()
+        .create(SurveyApiService::class.java)
+  }
+
+  @Singleton
+  @Provides
+  fun provideTokenApiService(
+    gson: Gson,
+    @Named("TokenHttpClient") okHttpClient: OkHttpClient,
+    @Named("EndpointUrl") endpointUrl: String
+  ): TokenApiService {
+    return Retrofit.Builder()
+        .baseUrl(endpointUrl)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(okHttpClient)
+        .build()
+        .create(TokenApiService::class.java)
+  }
+
+  @Singleton
+  @Provides
+  fun provideGson(): Gson = GsonBuilder().setFieldNamingPolicy(
+      FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES
+  ).create()
+
+  @Singleton
+  @Provides
+  @Named("SurveyHttpClient")
+  fun provideSurveyOkHttpClient(accountRepository: AccountRepository): OkHttpClient {
+    val logInterceptor = HttpLoggingInterceptor().also {
+      it.level =
+        if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
     }
 
-    @Singleton
-    @Provides
-    fun provideTokenApiService(
-        gson: Gson,
-        @Named("TokenHttpClient") okHttpClient: OkHttpClient,
-        @Named("EndpointUrl") endpointUrl: String
-    ): TokenApiService {
-        return Retrofit.Builder()
-            .baseUrl(endpointUrl)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient)
-            .build()
-            .create(TokenApiService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGson(): Gson = GsonBuilder().setFieldNamingPolicy(
-        FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES
-    ).create()
-
-    @Singleton
-    @Provides
-    @Named("SurveyHttpClient")
-    fun provideSurveyOkHttpClient(accountRepository: AccountRepository): OkHttpClient {
-        val logInterceptor = HttpLoggingInterceptor().also {
-            it.level =
-                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
+    return OkHttpClient.Builder()
+        .also {
+          it.addInterceptor(TokenInterceptor(accountRepository))
+          it.authenticator(TokenAuthenticator(accountRepository))
+          it.addInterceptor(logInterceptor)
         }
+        .build()
+  }
 
-        return OkHttpClient.Builder().also {
-            it.addInterceptor(TokenInterceptor(accountRepository))
-            it.authenticator(TokenAuthenticator(accountRepository))
-            it.addInterceptor(logInterceptor)
-        }.build()
+  @Singleton
+  @Provides
+  @Named("TokenHttpClient")
+  fun provideTokenOkHttpClient(): OkHttpClient {
+    val logInterceptor = HttpLoggingInterceptor().also {
+      it.level =
+        if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
     }
 
-    @Singleton
-    @Provides
-    @Named("TokenHttpClient")
-    fun provideTokenOkHttpClient(): OkHttpClient {
-        val logInterceptor = HttpLoggingInterceptor().also {
-            it.level =
-                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
+    return OkHttpClient.Builder()
+        .also {
+          it.addInterceptor(logInterceptor)
         }
-
-        return OkHttpClient.Builder().also {
-            it.addInterceptor(logInterceptor)
-        }.build()
-    }
+        .build()
+  }
 }

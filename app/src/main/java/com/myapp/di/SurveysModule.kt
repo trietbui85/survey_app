@@ -15,9 +15,9 @@ import dagger.multibindings.IntoMap
 abstract class SurveysModule {
 
     @ContributesAndroidInjector(
-        modules = [
-            ViewModelBuilder::class
-        ]
+            modules = [
+                ViewModelBuilder::class
+            ]
     )
     internal abstract fun mainFragment(): MainFragment
 

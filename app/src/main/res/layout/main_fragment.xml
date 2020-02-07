@@ -5,118 +5,131 @@
     android:id="@+id/viewContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.main.MainFragment"
+    >
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/viewToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+  <androidx.appcompat.widget.Toolbar
+      android:id="@+id/viewToolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/colorPrimary"
+      android:gravity="center"
+      android:orientation="horizontal"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
 
-        <ImageView
-            android:id="@+id/ivRefresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:src="@drawable/ic_refresh" />
-
-        <TextView
-            style="@style/TextView.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:text="@string/title_surveys_list" />
-
-        <ImageView
-            android:id="@+id/ivMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:src="@drawable/ic_menu" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewToolbar" />
-
-    <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/indicator"
+    <ImageView
+        android:id="@+id/ivRefresh"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="16dp"
-        app:ci_gravity="center"
-        app:ci_height="5dp"
-        app:ci_orientation="vertical"
-        app:ci_width="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/viewPager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/viewPager" />
-
-    <LinearLayout
-        android:id="@+id/viewLoadingFullScreen"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:text="@string/load_next_page"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/fetching_surveys"
-            android:textAppearance="?attr/textAppearanceSmallPopupMenu" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/viewLoadMore"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#80aaaaaa"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="@drawable/ic_refresh"
+        />
+
+    <TextView
+        style="@style/TextView.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:text="@string/title_surveys_list"
+        />
+
+    <ImageView
+        android:id="@+id/ivMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="@drawable/ic_menu"
+        />
+
+  </androidx.appcompat.widget.Toolbar>
+
+  <androidx.viewpager2.widget.ViewPager2
+      android:id="@+id/viewPager"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/viewToolbar"
+      />
+
+  <me.relex.circleindicator.CircleIndicator3
+      android:id="@+id/indicator"
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_marginEnd="16dp"
+      app:ci_gravity="center"
+      app:ci_height="5dp"
+      app:ci_orientation="vertical"
+      app:ci_width="5dp"
+      app:layout_constraintBottom_toBottomOf="@+id/viewPager"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/viewPager"
+      />
+
+  <LinearLayout
+      android:id="@+id/viewLoadingFullScreen"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:text="@string/load_next_page"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/fetching_surveys"
+        android:textAppearance="?attr/textAppearanceSmallPopupMenu"
+        />
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/viewLoadMore"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:background="#80aaaaaa"
+      android:gravity="center_horizontal"
+      android:orientation="horizontal"
+      android:text="@string/load_next_page"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      >
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
         android:text="@string/load_next_page"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/load_next_page"
-            android:textAppearance="?attr/textAppearanceSmallPopupMenu" />
-    </LinearLayout>
+        android:textAppearance="?attr/textAppearanceSmallPopupMenu"
+        />
+  </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

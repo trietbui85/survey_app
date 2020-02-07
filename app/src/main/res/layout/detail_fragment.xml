@@ -4,41 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+  <androidx.appcompat.widget.Toolbar
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@color/colorPrimary"
+      >
 
-        <ImageView
-            android:id="@+id/ivBack"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_centerVertical="true"
-            android:padding="8dp"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            style="@style/TextView.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/title_survey_details" />
-
-
-    </androidx.appcompat.widget.Toolbar>
+    <ImageView
+        android:id="@+id/ivBack"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_centerVertical="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_back"
+        />
 
     <TextView
-        android:id="@+id/tvContent"
-        style="@style/TextView"
+        style="@style/TextView.Bold"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:gravity="center"
-        tools:text="@string/app_name"
-        android:textColor="@color/black" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/title_survey_details"
+        />
+
+
+  </androidx.appcompat.widget.Toolbar>
+
+  <TextView
+      android:id="@+id/tvContent"
+      style="@style/TextView"
+      android:layout_width="wrap_content"
+      android:layout_height="0dp"
+      android:layout_gravity="center"
+      android:layout_weight="1"
+      android:gravity="center"
+      tools:text="@string/app_name"
+      android:textColor="@color/black"
+      />
 </LinearLayout>

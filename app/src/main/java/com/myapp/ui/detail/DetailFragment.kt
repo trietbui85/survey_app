@@ -12,7 +12,8 @@ import com.myapp.R
 import com.myapp.data.repo.SurveyItem
 import com.myapp.utils.showToastLong
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.detail_fragment.*
+import kotlinx.android.synthetic.main.detail_fragment.ivBack
+import kotlinx.android.synthetic.main.detail_fragment.tvContent
 import javax.inject.Inject
 
 class DetailFragment : DaggerFragment() {
@@ -29,7 +30,8 @@ class DetailFragment : DaggerFragment() {
     private val viewModel by viewModels<DetailViewModel> { viewModelFactory }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.detail_fragment, container, false)
