@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.myapp.R
-import com.myapp.data.repo.Result
 import com.myapp.data.repo.SurveyItem
 import com.myapp.ui.detail.DetailFragment
 import com.myapp.utils.getErrorText
@@ -55,39 +54,49 @@ class MainFragment : DaggerFragment() {
     }
 
     private fun initLiveData() {
-        viewModel.surveyLiveData.observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Result.Status.LOADING -> {
-                    Timber.d("surveyLiveData: is loading")
-                    if (viewModel.isFirstTimeLoading()) {
-                        viewLoadMore.visibility = View.INVISIBLE
-                        viewLoadingFullScreen.visibility = View.VISIBLE
-                    } else {
-                        viewLoadMore.visibility = View.VISIBLE
-                        viewLoadingFullScreen.visibility = View.INVISIBLE
-                    }
-                }
-                Result.Status.ERROR -> {
-                    Timber.d("surveyLiveData: error: $it")
-                    viewLoadMore.visibility = View.INVISIBLE
-                    viewLoadingFullScreen.visibility = View.INVISIBLE
 
-                    val errorText = it.exception.getErrorText(requireContext())
-                    this.showToastLong(errorText)
-                }
-                Result.Status.SUCCESS -> {
-                    Timber.d("surveyLiveData: success: ${it.data}")
-                    viewLoadMore.visibility = View.INVISIBLE
-                    viewLoadingFullScreen.visibility = View.INVISIBLE
-                    if (it.data.isNullOrEmpty()) {
-                        this.showToastLong(R.string.no_surveys)
-                    } else {
-                        // TODO Need to restore previous selected position for indicator
-                        surveyAdapter.setItems(it.data.orEmpty())
+        viewModel.contentLiveData.observe(viewLifecycleOwner, Observer {
+            Timber.d("viewModel.contentLiveData: success: $it")
+            viewLoadMore.visibility = View.INVISIBLE
+            viewLoadingFullScreen.visibility = View.INVISIBLE
+            surveyAdapter.setItems(it!!)
 
-                        indicator.setViewPager(viewPager)
-                    }
+            val indicatorIndex = viewModel.indicatorIndexLiveData.value ?: -1
+            if (indicatorIndex >= 0) {
+                Timber.d("Restore ViewPager index to $indicatorIndex")
+                viewPager.setCurrentItem(indicatorIndex, false)
+            }
+
+            indicator.setViewPager(viewPager)
+        })
+
+        viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
+            Timber.d("viewModel.loadingLiveData: is loading: $it")
+            if (it.first) {
+                // If is loading
+                if (it.second) {
+                    // is first time
+                    viewLoadMore.visibility = View.INVISIBLE
+                    viewLoadingFullScreen.visibility = View.VISIBLE
+                } else {
+                    viewLoadMore.visibility = View.VISIBLE
+                    viewLoadingFullScreen.visibility = View.INVISIBLE
                 }
+            } else {
+                // stop loading
+                viewLoadMore.visibility = View.INVISIBLE
+                viewLoadingFullScreen.visibility = View.INVISIBLE
+            }
+        })
+
+        viewModel.errorLiveEvent.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { dataException ->
+                Timber.d("viewModel.errorLiveEvent: error: $it")
+                viewLoadMore.visibility = View.INVISIBLE
+                viewLoadingFullScreen.visibility = View.INVISIBLE
+
+                val errorText = dataException.getErrorText(requireContext())
+                this.showToastLong(errorText)
             }
         })
     }
@@ -109,18 +118,18 @@ class MainFragment : DaggerFragment() {
             }
         })
 
-        surveyAdapter.setItems(emptyList())
-
         viewPager.adapter = surveyAdapter
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
+                viewModel.setViewPagerSelectedIndex(position)
                 if (position == surveyAdapter.itemCount - 1) {
                     viewModel.loadNextPage()
                 }
             }
         })
+
     }
 
     interface OpenDetailCallback {

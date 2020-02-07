@@ -6,17 +6,15 @@ import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
-typealias ResultSurveys = Result<List<SurveyItem>>
-
 interface SurveyRepository {
-    suspend fun loadSurveys(pageNumber: Int, itemPerPage: Int): ResultSurveys
+    suspend fun loadSurveys(pageNumber: Int, itemPerPage: Int): Result<List<SurveyItem>>
 }
 
 class SurveyRepositoryImpl @Inject constructor(
     private val surveyRemoteDataSource: SurveyRemoteDataSource,
     private val mapper: SurveyDataMapper
 ) : SurveyRepository {
-    override suspend fun loadSurveys(pageNumber: Int, itemPerPage: Int): ResultSurveys {
+    override suspend fun loadSurveys(pageNumber: Int, itemPerPage: Int): Result<List<SurveyItem>> {
 
         return try {
             val response: Response<List<SurveyResponse>> =

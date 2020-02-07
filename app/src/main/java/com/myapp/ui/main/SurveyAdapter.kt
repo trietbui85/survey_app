@@ -34,12 +34,8 @@ class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
         }
     }
 
-    fun setItems(list: List<SurveyItem>) {
-        if (surveyItems.isEmpty()) {
-            this.surveyItems = list.toMutableList()
-        } else {
-            this.surveyItems.addAll(list)
-        }
+    fun setItems(list: MutableList<SurveyItem>) {
+        this.surveyItems = list
         notifyDataSetChanged()
     }
 

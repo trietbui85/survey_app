@@ -14,7 +14,10 @@ import com.myapp.data.repo.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Named
 import javax.inject.Singleton
 
 @ExperimentalCoroutinesApi
@@ -73,6 +76,16 @@ class ApplicationModule {
     @Singleton
     @Provides
     fun provideAccountDataMapper(gson: Gson): AccountDataMapper = AccountDataMapper(gson)
+
+    @Singleton
+    @Provides
+    @Named("MainDispatcher")
+    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
+    @Singleton
+    @Provides
+    @Named("IoDispatcher")
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
 }
 
