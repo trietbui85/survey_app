@@ -58,6 +58,9 @@ class MainViewModelTest {
         val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
         viewModel.contentLiveData.observeForever(contentObserver)
 
+        // TODO(triet) Must write test for _indicatorIndexLiveData too
+
+        // Invoke method `fetchSurveys()`
         viewModel.fetchSurveys(pageNumber)
 
         verifySequence {
