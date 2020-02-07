@@ -16,7 +16,12 @@ import com.myapp.ui.detail.DetailFragment
 import com.myapp.utils.getErrorText
 import com.myapp.utils.showToastLong
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.main_fragment.indicator
+import kotlinx.android.synthetic.main.main_fragment.ivMenu
+import kotlinx.android.synthetic.main.main_fragment.ivRefresh
+import kotlinx.android.synthetic.main.main_fragment.viewLoadMore
+import kotlinx.android.synthetic.main.main_fragment.viewLoadingFullScreen
+import kotlinx.android.synthetic.main.main_fragment.viewPager
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +39,8 @@ class MainFragment : DaggerFragment() {
     private lateinit var surveyAdapter: SurveyAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.main_fragment, container, false)
@@ -90,14 +96,15 @@ class MainFragment : DaggerFragment() {
         })
 
         viewModel.errorLiveEvent.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let { dataException ->
-                Timber.d("viewModel.errorLiveEvent: error: $it")
-                viewLoadMore.visibility = View.INVISIBLE
-                viewLoadingFullScreen.visibility = View.INVISIBLE
+            it.getContentIfNotHandled()
+                    ?.let { dataException ->
+                        Timber.d("viewModel.errorLiveEvent: error: $it")
+                        viewLoadMore.visibility = View.INVISIBLE
+                        viewLoadingFullScreen.visibility = View.INVISIBLE
 
-                val errorText = dataException.getErrorText(requireContext())
-                this.showToastLong(errorText)
-            }
+                        val errorText = dataException.getErrorText(requireContext())
+                        this.showToastLong(errorText)
+                    }
         })
     }
 

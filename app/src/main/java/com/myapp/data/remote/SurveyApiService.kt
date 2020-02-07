@@ -7,10 +7,10 @@ import retrofit2.http.Query
 
 interface SurveyApiService {
 
-    @GET("surveys.json")
-    suspend fun getSurveys(
-        @Query("page") page: Int = 1,
-        @Query("per_page") itemPerPage: Int
-    ): Response<List<SurveyResponse>>
+  @GET("surveys.json")
+  suspend fun getSurveys(
+    @Query("page") page: Int = 1,
+    @Query("per_page") itemPerPage: Int
+  ): Response<List<SurveyResponse>>
 
 }

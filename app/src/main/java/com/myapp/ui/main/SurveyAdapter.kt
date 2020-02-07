@@ -8,7 +8,10 @@ import coil.api.load
 import com.myapp.R
 import com.myapp.data.repo.SurveyItem
 import com.myapp.utils.getHighResImageUrl
-import kotlinx.android.synthetic.main.item_survey.view.*
+import kotlinx.android.synthetic.main.item_survey.view.btTakeSurvey
+import kotlinx.android.synthetic.main.item_survey.view.coverImage
+import kotlinx.android.synthetic.main.item_survey.view.description
+import kotlinx.android.synthetic.main.item_survey.view.name
 
 class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
     RecyclerView.Adapter<PagerVH>() {
@@ -16,12 +19,18 @@ class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
     private var surveyItems = mutableListOf<SurveyItem>()
     private var mCallback: MainFragment.OpenDetailCallback = callback
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerVH =
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): PagerVH =
         PagerVH(LayoutInflater.from(parent.context).inflate(R.layout.item_survey, parent, false))
 
     override fun getItemCount(): Int = surveyItems.size
 
-    override fun onBindViewHolder(holder: PagerVH, position: Int) = holder.itemView.run {
+    override fun onBindViewHolder(
+        holder: PagerVH,
+        position: Int
+    ) = holder.itemView.run {
         val surveyItem = surveyItems[position]
 
         name.text = surveyItem.title

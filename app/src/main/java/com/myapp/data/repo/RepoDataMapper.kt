@@ -9,65 +9,65 @@ import javax.inject.Inject
 
 class SurveyDataMapper @Inject constructor() {
 
-    fun fromSurveyResponse(response: SurveyResponse) = SurveyItem(
-        id = response.id,
-        title = response.title,
-        description = response.description,
-        coverImageUrl = response.coverImageUrl
-    )
+  fun fromSurveyResponse(response: SurveyResponse) = SurveyItem(
+      id = response.id,
+      title = response.title,
+      description = response.description,
+      coverImageUrl = response.coverImageUrl
+  )
 
-    fun fromSurveyEntity(entity: SurveyEntity) = SurveyItem(
-        id = entity.id,
-        title = entity.title,
-        description = entity.description,
-        coverImageUrl = entity.coverImageUrl
-    )
+  fun fromSurveyEntity(entity: SurveyEntity) = SurveyItem(
+      id = entity.id,
+      title = entity.title,
+      description = entity.description,
+      coverImageUrl = entity.coverImageUrl
+  )
 
-    fun toSurveyEntity(item: SurveyItem) = SurveyEntity(
-        id = item.id,
-        title = item.title,
-        description = item.description,
-        coverImageUrl = item.coverImageUrl
-    )
+  fun toSurveyEntity(item: SurveyItem) = SurveyEntity(
+      id = item.id,
+      title = item.title,
+      description = item.description,
+      coverImageUrl = item.coverImageUrl
+  )
 }
 
 class AccountDataMapper @Inject constructor(private val gson: Gson) {
-    fun fromAccessTokenResponse(response: AccessTokenResponse) = AccessTokenItem(
-        accessToken = response.accessToken,
-        tokenType = response.tokenType,
-        createdAt = response.createdAt,
-        expiresIn = response.expiresIn
+  fun fromAccessTokenResponse(response: AccessTokenResponse) = AccessTokenItem(
+      accessToken = response.accessToken,
+      tokenType = response.tokenType,
+      createdAt = response.createdAt,
+      expiresIn = response.expiresIn
+  )
+
+  fun fromAccessTokenEntity(entity: AccessTokenEntity) = AccessTokenItem(
+      accessToken = entity.accessToken,
+      tokenType = entity.tokenType,
+      createdAt = entity.createdAt,
+      expiresIn = entity.expiresIn
+  )
+
+  fun toAccessTokenEntity(item: AccessTokenItem) =
+    AccessTokenEntity(
+        accessToken = item.accessToken,
+        tokenType = item.tokenType,
+        createdAt = item.createdAt,
+        expiresIn = item.expiresIn
     )
 
-    fun fromAccessTokenEntity(entity: AccessTokenEntity) = AccessTokenItem(
-        accessToken = entity.accessToken,
-        tokenType = entity.tokenType,
-        createdAt = entity.createdAt,
-        expiresIn = entity.expiresIn
-    )
+  // Convert an AccessTokenEntity to JSON text
+  fun fromAccessTokenEntityToString(entity: AccessTokenEntity): String = gson.toJson(entity)
 
-    fun toAccessTokenEntity(item: AccessTokenItem) =
-        AccessTokenEntity(
-            accessToken = item.accessToken,
-            tokenType = item.tokenType,
-            createdAt = item.createdAt,
-            expiresIn = item.expiresIn
-        )
-
-    // Convert an AccessTokenEntity to JSON text
-    fun fromAccessTokenEntityToString(entity: AccessTokenEntity): String = gson.toJson(entity)
-
-    // Convert JSON text to an instance of AccessTokenEntity, or null
-    fun fromStringToAccessTokenEntity(jsonToken: String?): AccessTokenEntity? {
-        if (jsonToken.isNullOrBlank()) {
-            return null
-        }
-        return try {
-            gson.fromJson(jsonToken, AccessTokenEntity::class.java)
-        } catch (e: Exception) {
-            // Log.e("RepoDataMapper", "fromStringToAccessTokenEntity failed: $e")
-            null
-        }
+  // Convert JSON text to an instance of AccessTokenEntity, or null
+  fun fromStringToAccessTokenEntity(jsonToken: String?): AccessTokenEntity? {
+    if (jsonToken.isNullOrBlank()) {
+      return null
     }
+    return try {
+      gson.fromJson(jsonToken, AccessTokenEntity::class.java)
+    } catch (e: Exception) {
+      // Log.e("RepoDataMapper", "fromStringToAccessTokenEntity failed: $e")
+      null
+    }
+  }
 
 }

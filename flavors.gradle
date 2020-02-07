@@ -1,30 +1,30 @@
 ext {
-    strEndpointUrl = "ENDPOINT_URL"
-    strAccountGrantType = "ACCOUNT_GRANT_TYPE"
-    strAccountDefaultUsername = "ACCOUNT_DEFAULT_USERNAME"
-    strAccountDefaultPassword = "ACCOUNT_DEFAULT_PASSWORD"
+  strEndpointUrl = "ENDPOINT_URL"
+  strAccountGrantType = "ACCOUNT_GRANT_TYPE"
+  strAccountDefaultUsername = "ACCOUNT_DEFAULT_USERNAME"
+  strAccountDefaultPassword = "ACCOUNT_DEFAULT_PASSWORD"
 
-    fake = [
-            appId: "com.surveyapp.fake",
-            endpointUrl: "",
-            accountGrantType: "",
-            accountDefaultUsername: "",
-            accountDefaultPassword: "",
-    ]
+  fake = [
+      appId: "com.surveyapp.fake",
+      endpointUrl: "",
+      accountGrantType: "",
+      accountDefaultUsername: "",
+      accountDefaultPassword: "",
+  ]
 
-    dev = [
-            appId: "com.surveyapp.dev",
-            endpointUrl: "https://nimble-survey-api.herokuapp.com/",
-            accountGrantType: "password",
-            accountDefaultUsername: "carlos@nimbl3.com",
-            accountDefaultPassword: "antikera",
-    ]
+  dev = [
+      appId: "com.surveyapp.dev",
+      endpointUrl: "https://nimble-survey-api.herokuapp.com/",
+      accountGrantType: "password",
+      accountDefaultUsername: "carlos@nimbl3.com",
+      accountDefaultPassword: "antikera",
+  ]
 
-    prod = [
-            appId: "com.surveyapp.prod",
-            endpointUrl: "https://nimble-survey-api.herokuapp.com/",
-            accountGrantType: "password",
-            accountDefaultUsername: "carlos@nimbl3.com",
-            accountDefaultPassword: "antikera",
-    ]
+  prod = [
+      appId: "com.surveyapp.prod",
+      endpointUrl: "https://nimble-survey-api.herokuapp.com/",
+      accountGrantType: "password",
+      accountDefaultUsername: "carlos@nimbl3.com",
+      accountDefaultPassword: "antikera",
+  ]
 }

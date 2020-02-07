@@ -5,5 +5,5 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [SurveyEntity::class], version = 1, exportSchema = false)
 abstract class SurveyDatabase : RoomDatabase() {
-    abstract val surveyDao: SurveyDao
+  abstract val surveyDao: SurveyDao
 }

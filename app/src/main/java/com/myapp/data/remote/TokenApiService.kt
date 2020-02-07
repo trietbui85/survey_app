@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface TokenApiService {
 
-    @POST("oauth/token")
-    suspend fun refreshAccessToken(@Body tokenRequest: AccessTokenRequest): AccessTokenResponse
+  @POST("oauth/token")
+  suspend fun refreshAccessToken(@Body tokenRequest: AccessTokenRequest): AccessTokenResponse
 
 }

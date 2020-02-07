@@ -1,6 +1,5 @@
 package com.myapp.data.repo
 
-
 /**
  * A generic class that holds a value with its loading status.
  *
@@ -8,7 +7,11 @@ package com.myapp.data.repo
  * `LiveData<Result<T>>` to pass back the latest data to the UI with its fetch status.
  */
 
-data class Result<out T>(val status: Status, val data: T?, val exception: DataException?) {
+data class Result<out T>(
+    val status: Status,
+    val data: T?,
+    val exception: DataException?
+) {
 
     enum class Status {
         SUCCESS,
@@ -32,7 +35,10 @@ data class Result<out T>(val status: Status, val data: T?, val exception: DataEx
 }
 
 // This class is used to handle exception when parse data from network
-data class DataException(val httpCode: Int, val errorMessage: String) :
+data class DataException(
+    val httpCode: Int,
+    val errorMessage: String
+) :
     Exception(errorMessage) {
     companion object {
         const val ERROR_400_BAD_REQUEST = 400

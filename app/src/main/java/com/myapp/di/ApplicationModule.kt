@@ -9,8 +9,18 @@ import com.myapp.data.local.SurveyLocalDataSourceImpl
 import com.myapp.data.local.TokenLocalDataSource
 import com.myapp.data.local.TokenLocalDataSourceImpl
 import com.myapp.data.local.db.SurveyDatabase
-import com.myapp.data.remote.*
-import com.myapp.data.repo.*
+import com.myapp.data.remote.SurveyApiService
+import com.myapp.data.remote.SurveyRemoteDataSource
+import com.myapp.data.remote.SurveyRemoteDataSourceImpl
+import com.myapp.data.remote.TokenApiService
+import com.myapp.data.remote.TokenAuthenticator
+import com.myapp.data.remote.TokenRemoteDataSource
+import com.myapp.data.remote.TokenRemoteDataSourceImpl
+import com.myapp.data.repo.AccountDataMapper
+import com.myapp.data.repo.AccountRepository
+import com.myapp.data.repo.AccountRepositoryImpl
+import com.myapp.data.repo.SurveyRepository
+import com.myapp.data.repo.SurveyRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -61,10 +71,11 @@ class ApplicationModule {
     @Provides
     fun provideDatabase(context: Context): SurveyDatabase {
         return Room.databaseBuilder(
-            context.applicationContext,
-            SurveyDatabase::class.java,
-            "${SurveyDatabase::class.java.simpleName}.db"
-        ).build()
+                context.applicationContext,
+                SurveyDatabase::class.java,
+                "${SurveyDatabase::class.java.simpleName}.db"
+        )
+                .build()
     }
 
     @Singleton

@@ -16,16 +16,16 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        ApplicationModule::class,
-        AndroidSupportInjectionModule::class,
-        SurveysModule::class,
-        DetailModule::class
+      ApplicationModule::class,
+      AndroidSupportInjectionModule::class,
+      SurveysModule::class,
+      DetailModule::class
     ]
 )
 interface ApplicationComponent : AndroidInjector<SurveyApp> {
 
-    @Component.Factory
-    interface Factory {
-        fun create(@BindsInstance applicationContext: Context): ApplicationComponent
-    }
+  @Component.Factory
+  interface Factory {
+    fun create(@BindsInstance applicationContext: Context): ApplicationComponent
+  }
 }
