@@ -24,8 +24,7 @@ android {
                 arguments << [
                         "room.schemaLocation":"$projectDir/schemas".toString(),
                         "room.incremental"     : "true",
-                        "room.expandProjection": "true",
-                        "dagger.gradle.incremental": "true"
+                        "room.expandProjection": "true"
                 ]
             }
         }
