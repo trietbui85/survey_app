@@ -50,8 +50,9 @@ class MainViewModel @Inject constructor(
 
         fun fetchSurveysForPage(pageNumber: Int) {
             _currentPage = pageNumber
+            val showFullscreenLoading = _currentPage == 1
             viewModelScope.launch(mainDispatcher) {
-                _loadingLiveData.value = Pair(true, _currentPage == 1)
+                _loadingLiveData.value = Pair(true, showFullscreenLoading)
                 val result: Result<List<SurveyItem>> =
                     surveyRepository.loadSurveys(_currentPage, numOfItemPerPage)
                 if (result.status == Result.Status.SUCCESS) {
@@ -66,9 +67,11 @@ class MainViewModel @Inject constructor(
                     _contentLiveData.value = allItems
                 } else if (result.status == Result.Status.ERROR) {
                     _errorLiveEvent.value = LiveEvent(result.exception!!)
+                    // error means fetching is not successful, thus we must revert currentPage
+                    _currentPage--
                 }
 
-                _loadingLiveData.value = Pair(false, _currentPage == 1)
+                _loadingLiveData.value = Pair(false, showFullscreenLoading)
             }
         }
 

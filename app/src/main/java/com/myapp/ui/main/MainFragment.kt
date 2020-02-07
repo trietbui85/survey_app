@@ -61,7 +61,6 @@ class MainFragment : DaggerFragment() {
             viewLoadingFullScreen.visibility = View.INVISIBLE
             surveyAdapter.setItems(it!!)
 
-
             val pagerIndex = viewModel.pageIndexLiveData.value ?: -1
             Timber.d("Restore ViewPager index to $pagerIndex")
             if (pagerIndex >= 0) {
