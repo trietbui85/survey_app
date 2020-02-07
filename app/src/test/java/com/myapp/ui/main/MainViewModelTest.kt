@@ -2,6 +2,7 @@ package com.myapp.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.google.common.truth.Truth.assertThat
 import com.myapp.data.repo.DataException
 import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
@@ -69,6 +70,8 @@ class MainViewModelTest {
             // stop loading, will fullscreen
             loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
+
+        assertThat(viewModel.getCurrentPage()).isEqualTo(pageNumber)
     }
 
     @Test
@@ -98,6 +101,7 @@ class MainViewModelTest {
             // stop loading, will fullscreen
             loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
+        assertThat(viewModel.getCurrentPage()).isLessThan(pageNumber)
     }
 
     @Test
@@ -123,6 +127,7 @@ class MainViewModelTest {
             // stop loading, will fullscreen
             loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
+        assertThat(viewModel.getCurrentPage()).isEqualTo(pageNumber)
     }
 
     @Test
@@ -148,6 +153,8 @@ class MainViewModelTest {
             // stop loading, will fullscreen
             loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
+        // Make sure if failed, then currentPage is previous page
+        assertThat(viewModel.getCurrentPage()).isEqualTo(pageNumber - 1)
     }
 
 }

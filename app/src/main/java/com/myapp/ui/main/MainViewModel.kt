@@ -1,5 +1,6 @@
 package com.myapp.ui.main
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,7 @@ class MainViewModel @Inject constructor(
     @Named("IoDispatcher") private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    // Current page to load network data, is 1-based
     private var _currentPage = 1
 
     // private val _pageNumberLiveData = MutableLiveData<Int>()
@@ -44,6 +46,9 @@ class MainViewModel @Inject constructor(
 
     val errorLiveEvent: LiveData<LiveEvent<DataException>>
         get() = _errorLiveEvent
+
+    @VisibleForTesting
+    fun getCurrentPage() = _currentPage
 
     fun fetchSurveys(pageNumber: Int = 1, forceReload: Boolean = false) {
         Timber.d("Start fetching survey of page $pageNumber")
