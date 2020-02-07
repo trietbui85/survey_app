@@ -60,9 +60,13 @@ class MainViewModelTest {
         viewModel.fetchSurveys(pageNumber)
 
         verifySequence {
-            contentObserver.onChanged(mutableListOf()) // reset when load first page
+            // reset data when load first page
+            contentObserver.onChanged(mutableListOf())
+            // is loading, will fullscreen
             loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+            // receive success data
             contentObserver.onChanged(resultSuccess.data)
+            // stop loading, will fullscreen
             loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
     }
@@ -85,9 +89,63 @@ class MainViewModelTest {
         viewModel.fetchSurveys(pageNumber)
 
         verifySequence {
-            contentObserver.onChanged(mutableListOf()) // reset when load first page
+            // reset data when load first page
+            contentObserver.onChanged(mutableListOf())
+            // is loading, will fullscreen
             loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+            // receive error
             errorObserver.onChanged(LiveEvent(resultError.exception!!))
+            // stop loading, will fullscreen
+            loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+        }
+    }
+
+    @Test
+    fun fetchSurveys_SecondPageAndSuccess_ThenWithTheseResults() = runBlocking {
+        val pageNumber = 2
+        val isFullscreen = pageNumber == 1
+        coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultSuccess
+
+        val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
+        viewModel.loadingLiveData.observeForever(loadingObserver)
+
+        val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
+        viewModel.contentLiveData.observeForever(contentObserver)
+
+        viewModel.fetchSurveys(pageNumber)
+
+        verifySequence {
+            // there will be NO reset data when load second page
+            // first is loading, will fullscreen
+            loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+            // receive success data
+            contentObserver.onChanged(resultSuccess.data)
+            // stop loading, will fullscreen
+            loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+        }
+    }
+
+    @Test
+    fun fetchSurveys_SecondPageAndFailed_ThenWithTheseResults() = runBlocking {
+        val pageNumber = 2
+        val isFullscreen = pageNumber == 1
+        coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultError
+
+        val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
+        viewModel.loadingLiveData.observeForever(loadingObserver)
+
+        val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
+        viewModel.errorLiveEvent.observeForever(errorObserver)
+
+        viewModel.fetchSurveys(pageNumber)
+
+        verifySequence {
+            // there will be NO reset data when load second page
+            // is loading, will fullscreen
+            loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+            // receive error
+            errorObserver.onChanged(LiveEvent(resultError.exception!!))
+            // stop loading, will fullscreen
             loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
         }
     }
