@@ -94,10 +94,17 @@ class MainViewModel @Inject constructor(
 
     }
 
-    fun loadNextPage() {
+    // Loading next page. Return TRUE if can continue loading, otherwise FALSE if loading is
+    // in progress already and we must wait for
+    fun loadNextPage(): Boolean {
+        if (_loadingLiveData.value?.first == true) {
+            Timber.d("Is still fetching data for page $_currentPage, so don't loadNext()")
+            return false
+        }
         val nextPage = _currentPage + 1
         Timber.d("NextPage fetching survey to page $nextPage")
         fetchSurveys(nextPage)
+        return true
     }
 
     fun setViewPagerSelectedIndex(pageIndex: Int) {
