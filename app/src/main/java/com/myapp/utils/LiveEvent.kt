@@ -20,8 +20,10 @@ import androidx.lifecycle.Observer
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
+ *
+ * Note: it MUST BE data class (so that we can use equal() and hashCode() method in test case)
  */
-open class LiveEvent<out T>(private val content: T) {
+data class LiveEvent<out T>(private val content: T) {
 
     private var hasBeenHandled = false
 
@@ -42,9 +44,6 @@ open class LiveEvent<out T>(private val content: T) {
      */
     fun peekContent(): T = content
 
-    override fun toString(): String {
-        return "LiveEvent(content=$content, hasBeenHandled=$hasBeenHandled)"
-    }
 }
 
 /**
