@@ -17,6 +17,9 @@ open class SurveyApp : DaggerApplication() {
 
   override fun onCreate() {
     super.onCreate()
+
+    ThirdPartyLibInit.init()
+
     if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     Timber.d("Start SURVEY Application")
   }
