@@ -140,6 +140,9 @@ dependencies {
 
   implementation "com.jakewharton.timber:timber:4.7.1"
 
+  // debugImplementation because LeakCanary should only run in debug builds.
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+
   // Note: DON'T upgrade JUnit to v4.13 - it will cause error "Unresolved reference: Test" in
   // test file although these test cases can still be run
   //noinspection GradleDependency
