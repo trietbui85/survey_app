@@ -7,7 +7,7 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
-  <style name="TextView" parent="@android:style/Widget.TextView">
+  <style name="TextStyle" parent="@android:style/Widget.TextView">
     <item name="android:textSize">@dimen/normal_text_size</item>
     <item name="android:layout_marginStart">@dimen/normal_margin</item>
     <item name="android:layout_marginEnd">@dimen/normal_margin</item>
@@ -15,11 +15,14 @@
     <item name="android:gravity">center</item>
   </style>
 
-  <style name="TextView.Bold">
+  <style name="ToolbarTextStyle" parent="@android:style/Widget.TextView">
+    <item name="android:textSize">@dimen/normal_text_size</item>
+    <item name="android:textColor">@color/colorWhite</item>
+    <item name="android:gravity">center</item>
     <item name="android:textStyle">bold</item>
   </style>
 
-  <style name="Title" parent="TextView">
+  <style name="Title" parent="TextStyle">
     <item name="android:textColor">@color/colorPrimaryDark</item>
     <item name="android:textSize">@dimen/xlarge_text_size</item>
     <item name="android:textStyle">bold</item>
@@ -30,7 +33,7 @@
     <item name="android:textColor">@color/colorWhite</item>
   </style>
 
-  <style name="Description" parent="TextView">
+  <style name="Description" parent="TextStyle">
     <item name="android:layout_marginTop">@dimen/small_margin</item>
     <item name="android:layout_marginBottom">@dimen/normal_margin</item>
     <item name="android:gravity">center_horizontal</item>
