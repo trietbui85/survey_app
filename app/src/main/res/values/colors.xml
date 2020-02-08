@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#008577</color>
-  <color name="colorPrimaryDark">#00574B</color>
+  <color name="colorPrimary">#0C1E3C</color>
+  <color name="colorPrimaryDark">#142146</color>
   <color name="colorAccent">#D81B60</color>
 
-  <color name="white">#FFFFFF</color>
-  <color name="black">#000000</color>
-  <color name="orange">#C62637</color>
-  <color name="gray">#A9A9A9</color>
-  <color name="toolbar">#0F0431</color>
-  <color name="translucent_black">#73000000</color>
-
-  <color name="toolbar_shadow_start_color">#3D000000</color>
-  <color name="toolbar_shadow_end_color">#00000000</color>
+  <color name="colorWhite">#FFFFFF</color>
+  <color name="colorBlack">#000000</color>
+  <color name="colorButtonDefault">#C62637</color>
+  <color name="colorButtonSelected">#FF8A3840</color>
+  <color name="colorImageForeground">#70000000</color>
 
 </resources>

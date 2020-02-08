@@ -7,7 +7,7 @@
     >
 
   <ImageView
-      android:id="@+id/coverImage"
+      android:id="@+id/coverImageView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scaleType="centerCrop"
@@ -16,14 +16,13 @@
   <View
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@color/translucent_black"
+      android:background="@color/colorImageForeground"
       />
 
   <TextView
-      android:id="@+id/name"
-      style="@style/Title.White"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
+      android:id="@+id/nameTextView"
+      style="@style/TitleStyle"
+      android:layout_marginTop="@dimen/top_margin"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -31,26 +30,23 @@
       />
 
   <TextView
-      android:id="@+id/description"
-      style="@style/Description"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintBottom_toTopOf="@id/btTakeSurvey"
+      android:id="@+id/descriptionTextView"
+      style="@style/DescriptionStyle"
+      android:layout_marginTop="@dimen/small_margin"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/name"
+      app:layout_constraintTop_toBottomOf="@id/nameTextView"
       tools:text="Marriott Bangkok Sukhumvit Hotel"
       />
 
-  <TextView
-      android:id="@+id/btTakeSurvey"
-      style="@style/Button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+  <Button
+      android:id="@+id/takeSurveyButton"
+      style="@style/ButtonStyle"
       android:text="@string/take_the_survey"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
+      android:layout_marginBottom="@dimen/bottom_margin"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

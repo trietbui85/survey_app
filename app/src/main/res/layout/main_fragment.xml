@@ -9,29 +9,22 @@
     >
 
   <androidx.appcompat.widget.Toolbar
-      android:id="@+id/viewToolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/colorPrimary"
-      android:gravity="center"
-      android:orientation="horizontal"
+      android:id="@+id/mainToolbar"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      style="@style/ToolbarStyle"
       >
 
     <ImageView
-        android:id="@+id/ivRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/refreshButton"
         android:layout_marginStart="8dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
         android:src="@drawable/ic_refresh"
+        style="@style/ToolbarMenuItemStyle"
         />
 
     <TextView
-        style="@style/TextView.Bold"
+        style="@style/ToolbarTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -40,14 +33,11 @@
         />
 
     <ImageView
-        android:id="@+id/ivMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/menuButton"
         android:layout_gravity="end"
         android:layout_marginEnd="8dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="8dp"
         android:src="@drawable/ic_menu"
+        style="@style/ToolbarMenuItemStyle"
         />
 
   </androidx.appcompat.widget.Toolbar>
@@ -60,7 +50,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/viewToolbar"
+      app:layout_constraintTop_toBottomOf="@id/mainToolbar"
       />
 
   <me.relex.circleindicator.CircleIndicator3
@@ -78,7 +68,7 @@
       />
 
   <LinearLayout
-      android:id="@+id/viewLoadingFullScreen"
+      android:id="@+id/fullscreenLoadingView"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:gravity="center"
@@ -105,7 +95,7 @@
   </LinearLayout>
 
   <LinearLayout
-      android:id="@+id/viewLoadMore"
+      android:id="@+id/loadMoreView"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:background="#80aaaaaa"
