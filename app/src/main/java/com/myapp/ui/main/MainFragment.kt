@@ -17,11 +17,11 @@ import com.myapp.ui.detail.DetailFragment
 import com.myapp.utils.getErrorText
 import com.myapp.utils.showToastLong
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.main_fragment.fullscreenLoadingView
 import kotlinx.android.synthetic.main.main_fragment.indicator
-import kotlinx.android.synthetic.main.main_fragment.ivMenu
-import kotlinx.android.synthetic.main.main_fragment.ivRefresh
-import kotlinx.android.synthetic.main.main_fragment.viewLoadMore
-import kotlinx.android.synthetic.main.main_fragment.viewLoadingFullScreen
+import kotlinx.android.synthetic.main.main_fragment.loadMoreView
+import kotlinx.android.synthetic.main.main_fragment.menuButton
+import kotlinx.android.synthetic.main.main_fragment.refreshButton
 import kotlinx.android.synthetic.main.main_fragment.viewPager
 import timber.log.Timber
 import javax.inject.Inject
@@ -70,8 +70,8 @@ class MainFragment : DaggerFragment() {
 
     viewModel.contentLiveData.observe(viewLifecycleOwner, Observer {
       Timber.d("viewModel.contentLiveData: success: $it")
-      viewLoadMore.visibility = View.INVISIBLE
-      viewLoadingFullScreen.visibility = View.INVISIBLE
+      loadMoreView.visibility = View.INVISIBLE
+      fullscreenLoadingView.visibility = View.INVISIBLE
       surveyAdapter.setItems(it!!)
 
       val indicatorIndex = viewModel.indicatorIndexLiveData.value ?: -1
@@ -89,16 +89,16 @@ class MainFragment : DaggerFragment() {
         // If is loading
         if (it.second) {
           // is first time
-          viewLoadMore.visibility = View.INVISIBLE
-          viewLoadingFullScreen.visibility = View.VISIBLE
+          loadMoreView.visibility = View.INVISIBLE
+          fullscreenLoadingView.visibility = View.VISIBLE
         } else {
-          viewLoadMore.visibility = View.VISIBLE
-          viewLoadingFullScreen.visibility = View.INVISIBLE
+          loadMoreView.visibility = View.VISIBLE
+          fullscreenLoadingView.visibility = View.INVISIBLE
         }
       } else {
         // stop loading
-        viewLoadMore.visibility = View.INVISIBLE
-        viewLoadingFullScreen.visibility = View.INVISIBLE
+        loadMoreView.visibility = View.INVISIBLE
+        fullscreenLoadingView.visibility = View.INVISIBLE
       }
     })
 
@@ -106,8 +106,8 @@ class MainFragment : DaggerFragment() {
       it.getContentIfNotHandled()
         ?.let { dataException ->
           Timber.d("viewModel.errorLiveEvent: error: $it")
-          viewLoadMore.visibility = View.INVISIBLE
-          viewLoadingFullScreen.visibility = View.INVISIBLE
+          loadMoreView.visibility = View.INVISIBLE
+          fullscreenLoadingView.visibility = View.INVISIBLE
 
           val errorText = dataException.getErrorText(requireContext())
           this.showToastLong(errorText)
@@ -116,11 +116,11 @@ class MainFragment : DaggerFragment() {
   }
 
   private fun initViewAndAction() {
-    ivRefresh.setOnClickListener {
+    refreshButton.setOnClickListener {
       surveyAdapter.clearItems()
       viewModel.fetchSurveys(1, true)
     }
-    ivMenu.setOnClickListener {
+    menuButton.setOnClickListener {
       // No action for Menu More, thus just show a Toast
       this.showToastLong(R.string.menu_more)
     }

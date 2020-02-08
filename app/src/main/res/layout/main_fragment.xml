@@ -9,7 +9,7 @@
     >
 
   <androidx.appcompat.widget.Toolbar
-      android:id="@+id/viewToolbar"
+      android:id="@+id/mainToolbar"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
@@ -17,7 +17,7 @@
       >
 
     <ImageView
-        android:id="@+id/ivRefresh"
+        android:id="@+id/refreshButton"
         android:layout_marginStart="8dp"
         android:src="@drawable/ic_refresh"
         style="@style/ToolbarMenuItemStyle"
@@ -33,7 +33,7 @@
         />
 
     <ImageView
-        android:id="@+id/ivMenu"
+        android:id="@+id/menuButton"
         android:layout_gravity="end"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_menu"
@@ -50,7 +50,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/viewToolbar"
+      app:layout_constraintTop_toBottomOf="@id/mainToolbar"
       />
 
   <me.relex.circleindicator.CircleIndicator3
@@ -68,7 +68,7 @@
       />
 
   <LinearLayout
-      android:id="@+id/viewLoadingFullScreen"
+      android:id="@+id/fullscreenLoadingView"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:gravity="center"
@@ -95,7 +95,7 @@
   </LinearLayout>
 
   <LinearLayout
-      android:id="@+id/viewLoadMore"
+      android:id="@+id/loadMoreView"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:background="#80aaaaaa"

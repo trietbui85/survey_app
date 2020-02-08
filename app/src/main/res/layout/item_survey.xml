@@ -7,7 +7,7 @@
     >
 
   <ImageView
-      android:id="@+id/coverImage"
+      android:id="@+id/coverImageView"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scaleType="centerCrop"
@@ -20,7 +20,7 @@
       />
 
   <TextView
-      android:id="@+id/name"
+      android:id="@+id/nameTextView"
       style="@style/TitleStyle"
       android:layout_marginTop="@dimen/top_margin"
       app:layout_constraintEnd_toEndOf="parent"
@@ -30,17 +30,17 @@
       />
 
   <TextView
-      android:id="@+id/description"
+      android:id="@+id/descriptionTextView"
       style="@style/DescriptionStyle"
       android:layout_marginTop="@dimen/small_margin"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/name"
+      app:layout_constraintTop_toBottomOf="@id/nameTextView"
       tools:text="Marriott Bangkok Sukhumvit Hotel"
       />
 
   <Button
-      android:id="@+id/btTakeSurvey"
+      android:id="@+id/takeSurveyButton"
       style="@style/ButtonStyle"
       android:text="@string/take_the_survey"
       app:layout_constraintBottom_toBottomOf="parent"
