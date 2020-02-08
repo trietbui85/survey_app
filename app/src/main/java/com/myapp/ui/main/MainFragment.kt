@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.myapp.R
 import com.myapp.data.repo.SurveyItem
-import com.myapp.ui.detail.DetailFragment
 import com.myapp.utils.getErrorText
 import com.myapp.utils.showToastLong
 import dagger.android.support.DaggerFragment
@@ -143,8 +141,7 @@ class MainFragment : DaggerFragment() {
 
     surveyAdapter = SurveyAdapter(object : OpenDetailCallback {
       override fun click(item: SurveyItem) {
-        val bundle = bundleOf(DetailFragment.EXTRA_SURVEY_ITEM to item)
-        findNavController().navigate(R.id.action_mainFragment_to_detailFragment, bundle)
+        findNavController().navigate(MainFragmentDirections.actionToDetailFragment(item))
       }
     })
 
