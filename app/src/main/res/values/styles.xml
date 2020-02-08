@@ -21,7 +21,7 @@
 
   <style name="Title" parent="TextView">
     <item name="android:textColor">@color/colorPrimaryDark</item>
-    <item name="android:textSize">@dimen/title_text_size</item>
+    <item name="android:textSize">@dimen/xlarge_text_size</item>
     <item name="android:textStyle">bold</item>
     <item name="android:layout_marginTop">@dimen/top_margin</item>
   </style>
@@ -41,9 +41,9 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@drawable/rounded_btn</item>
-    <item name="android:paddingStart">@dimen/big_padding</item>
+    <item name="android:paddingStart">@dimen/large_padding</item>
     <item name="android:paddingTop">@dimen/normal_padding</item>
-    <item name="android:paddingEnd">@dimen/big_padding</item>
+    <item name="android:paddingEnd">@dimen/large_padding</item>
     <item name="android:paddingBottom">@dimen/normal_padding</item>
     <item name="android:textColor">@color/colorWhite</item>
     <item name="android:textAllCaps">false</item>
