@@ -40,12 +40,12 @@ class DetailFragment : DaggerFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This callback will only be called when MyFragment is at least Started.
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 goBack()
             }
         }
+        // Let fragment handles that BackPress instead
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
