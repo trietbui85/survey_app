@@ -22,22 +22,18 @@
     <item name="android:textStyle">bold</item>
   </style>
 
-  <style name="Title" parent="TextStyle">
-    <item name="android:textColor">@color/colorPrimaryDark</item>
-    <item name="android:textSize">@dimen/xlarge_text_size</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:layout_marginTop">@dimen/top_margin</item>
-  </style>
-
-  <style name="Title.White">
-    <item name="android:textColor">@color/colorWhite</item>
-  </style>
-
   <style name="Description" parent="TextStyle">
     <item name="android:layout_marginTop">@dimen/small_margin</item>
     <item name="android:layout_marginBottom">@dimen/normal_margin</item>
     <item name="android:gravity">center_horizontal</item>
     <item name="android:scrollbars">vertical</item>
+  </style>
+
+  <style name="TitleStyle" parent="TextStyle">
+    <item name="android:textSize">@dimen/xlarge_text_size</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">match_parent</item>
   </style>
 
   <style name="ButtonStyle">
