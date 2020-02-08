@@ -39,6 +39,16 @@ class MainFragment : DaggerFragment() {
 
   private lateinit var surveyAdapter: SurveyAdapter
 
+  private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+    override fun onPageSelected(position: Int) {
+      super.onPageSelected(position)
+      Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
+      viewModel.setViewPagerSelectedIndex(position)
+      if (position == surveyAdapter.itemCount - 1) {
+        viewModel.loadNextPage()
+      }
+    }
+  }
   init {
     lifecycleScope.launchWhenCreated {
       val indicatorIndex = viewModel.indicatorIndexLiveData.value ?: -1
@@ -57,6 +67,12 @@ class MainFragment : DaggerFragment() {
     savedInstanceState: Bundle?
   ): View {
     return inflater.inflate(R.layout.main_fragment, container, false)
+  }
+
+  override fun onDestroyView() {
+    viewPager.unregisterOnPageChangeCallback(pageChangeCallback)
+    viewPager.adapter = null
+    super.onDestroyView()
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -133,16 +149,7 @@ class MainFragment : DaggerFragment() {
     })
 
     viewPager.adapter = surveyAdapter
-    viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-      override fun onPageSelected(position: Int) {
-        super.onPageSelected(position)
-        Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
-        viewModel.setViewPagerSelectedIndex(position)
-        if (position == surveyAdapter.itemCount - 1) {
-          viewModel.loadNextPage()
-        }
-      }
-    })
+    viewPager.registerOnPageChangeCallback(pageChangeCallback)
 
   }
 
