@@ -10,14 +10,10 @@
 
   <androidx.appcompat.widget.Toolbar
       android:id="@+id/viewToolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:background="@color/colorPrimary"
-      android:gravity="center"
-      android:orientation="horizontal"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      style="@style/ToolbarStyle"
       >
 
     <ImageView

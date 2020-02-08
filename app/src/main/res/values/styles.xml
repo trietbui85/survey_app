@@ -61,4 +61,13 @@
     <item name="android:padding">8dp</item>
   </style>
 
+  <style name="ToolbarStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">?attr/actionBarSize</item>
+    <item name="android:background">@color/colorPrimary</item>
+    <item name="android:gravity">center</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:elevation">4dp</item>
+  </style>
+
 </resources>
