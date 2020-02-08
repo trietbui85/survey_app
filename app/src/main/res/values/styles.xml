@@ -37,8 +37,9 @@
     <item name="android:scrollbars">vertical</item>
   </style>
 
-  <style name="Button" parent="TextView">
-    <item name="android:layout_marginBottom">@dimen/bottom_margin</item>
+  <style name="ButtonStyle" parent="TextView">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@drawable/rounded_btn</item>
     <item name="android:paddingStart">@dimen/big_padding</item>
     <item name="android:paddingTop">@dimen/normal_padding</item>

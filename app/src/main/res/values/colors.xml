@@ -6,8 +6,8 @@
 
   <color name="white">#FFFFFF</color>
   <color name="black">#000000</color>
-  <color name="orange">#C62637</color>
-  <color name="gray">#A9A9A9</color>
+  <color name="colorButtonDefault">#C62637</color>
+  <color name="colorButtonSelected">#FF8A3840</color>
   <color name="toolbar">#0F0431</color>
   <color name="translucent_black">#73000000</color>
 
