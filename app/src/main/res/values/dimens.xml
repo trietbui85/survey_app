@@ -11,8 +11,8 @@
   <dimen name="big_padding">27dp</dimen>
 
   <dimen name="title_text_size">34sp</dimen>
-  <dimen name="normal_text_size">25sp</dimen>
-  <dimen name="desc_text_size">18sp</dimen>
+  <dimen name="large_text_size">25sp</dimen>
+  <dimen name="normal_text_size">18sp</dimen>
 
   <dimen name="rounded_button_corner_radius">30dp</dimen>
   <dimen name="shadow_height">4dp</dimen>
