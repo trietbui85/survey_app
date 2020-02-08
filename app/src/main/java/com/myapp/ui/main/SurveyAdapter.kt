@@ -13,11 +13,10 @@ import kotlinx.android.synthetic.main.item_survey.view.descriptionTextView
 import kotlinx.android.synthetic.main.item_survey.view.nameTextView
 import kotlinx.android.synthetic.main.item_survey.view.takeSurveyButton
 
-class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
+class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
   RecyclerView.Adapter<PagerVH>() {
 
   private var surveyItems = mutableListOf<SurveyItem>()
-  private var mCallback: MainFragment.OpenDetailCallback = callback
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -39,7 +38,7 @@ class SurveyAdapter(callback: MainFragment.OpenDetailCallback) :
       coverImageView.load(surveyItem.getHighResImageUrl())
     }
     takeSurveyButton.setOnClickListener {
-      mCallback.click(surveyItem)
+      callback.click(surveyItem)
     }
   }
 
