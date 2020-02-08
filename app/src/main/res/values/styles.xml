@@ -11,7 +11,7 @@
     <item name="android:textSize">@dimen/desc_text_size</item>
     <item name="android:layout_marginStart">@dimen/normal_margin</item>
     <item name="android:layout_marginEnd">@dimen/normal_margin</item>
-    <item name="android:textColor">@color/white</item>
+    <item name="android:textColor">@color/colorWhite</item>
     <item name="android:gravity">center</item>
   </style>
 
@@ -27,7 +27,7 @@
   </style>
 
   <style name="Title.White">
-    <item name="android:textColor">@color/white</item>
+    <item name="android:textColor">@color/colorWhite</item>
   </style>
 
   <style name="Description" parent="TextView">
