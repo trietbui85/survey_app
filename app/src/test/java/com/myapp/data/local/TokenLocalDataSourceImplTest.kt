@@ -8,8 +8,8 @@ import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.repo.AccountDataMapper
 import com.myapp.di.NetworkModule.Companion.DEFAULT_GSON
 import com.myapp.ui.SurveyApp
-import com.myapp.utils.TestData.jsonTokenData
-import com.myapp.utils.TestData.tokenEntity
+import com.myapp.utils.TestData.testJsonToken
+import com.myapp.utils.TestData.testTokenEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -90,16 +90,16 @@ class TokenLocalDataSourceImplTest {
 
   @Test
   fun loadTokenFromCache_ValidDataInSharedPref_ReturnSuccess() = runBlockingTest(testDispatcher) {
-    setTextDataForSharedPref(jsonTokenData)
+    setTextDataForSharedPref(testJsonToken)
     val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
 
     assertThat(entity).isNotNull()
-    assertThat(entity).isEqualTo(tokenEntity)
+    assertThat(entity).isEqualTo(testTokenEntity)
   }
 
   @Test
   fun removeTokenFromCache_HasDataInSharedPref_ReturnSuccess() = runBlockingTest(testDispatcher) {
-    setTextDataForSharedPref(jsonTokenData)
+    setTextDataForSharedPref(testJsonToken)
     dataSource.removeTokenFromCache()
 
     val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
@@ -120,22 +120,22 @@ class TokenLocalDataSourceImplTest {
   fun saveTokenToCache_HasNoDataInSharedPref_ReturnSuccess() =
     runBlockingTest(testDispatcher) {
       clearTextDataForSharedPref()
-      dataSource.saveTokenToCache(tokenEntity)
+      dataSource.saveTokenToCache(testTokenEntity)
 
       val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
       assertThat(entity).isNotNull()
-      assertThat(entity).isEqualTo(tokenEntity)
+      assertThat(entity).isEqualTo(testTokenEntity)
     }
 
   @Test
   fun saveTokenToCache_HasDataInSharedPref_ReturnSuccess() =
     runBlockingTest(testDispatcher) {
-      setTextDataForSharedPref(jsonTokenData)
-      dataSource.saveTokenToCache(tokenEntity)
+      setTextDataForSharedPref(testJsonToken)
+      dataSource.saveTokenToCache(testTokenEntity)
 
       val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
       assertThat(entity).isNotNull()
-      assertThat(entity).isEqualTo(tokenEntity)
+      assertThat(entity).isEqualTo(testTokenEntity)
     }
 
 }

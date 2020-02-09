@@ -7,7 +7,7 @@ import com.myapp.data.local.db.SurveyDao
 import com.myapp.data.local.db.SurveyDatabase
 import com.myapp.data.local.db.SurveyEntity
 import com.myapp.ui.SurveyApp
-import com.myapp.utils.TestData.surveyEntities
+import com.myapp.utils.TestData.testSurveyEntities
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -70,14 +70,14 @@ class SurveyLocalDataSourceImplTest {
     runBlocking {
       val surveys: List<SurveyEntity> = surveyDao.let {
         it.deleteAll()
-        it.insertItems(surveyEntities)
+        it.insertItems(testSurveyEntities)
         return@let it.loadAll()
       }
 
       assertThat(surveys).let {
         it.isNotNull()
-        it.hasSize(surveyEntities.size)
-        it.containsExactlyElementsIn(surveyEntities)
+        it.hasSize(testSurveyEntities.size)
+        it.containsExactlyElementsIn(testSurveyEntities)
       }
     }
   }
@@ -87,14 +87,14 @@ class SurveyLocalDataSourceImplTest {
     runBlocking {
       val surveys: List<SurveyEntity> = surveyDao.let {
         it.deleteAll()
-        it.insertItems(surveyEntities)
+        it.insertItems(testSurveyEntities)
         return@let it.loadAll()
       }
 
       assertThat(surveys).let {
         it.isNotNull()
-        it.hasSize(surveyEntities.size)
-        it.containsExactlyElementsIn(surveyEntities)
+        it.hasSize(testSurveyEntities.size)
+        it.containsExactlyElementsIn(testSurveyEntities)
       }
     }
   }
@@ -105,15 +105,15 @@ class SurveyLocalDataSourceImplTest {
 
       val surveys: List<SurveyEntity> = surveyDao.let {
         it.deleteAll()
-        it.insertItems(listOf(surveyEntities.first()))
-        it.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
+        it.insertItems(listOf(testSurveyEntities.first()))
+        it.insertItems(testSurveyEntities.takeLast(testSurveyEntities.size - 1))
         return@let it.loadAll()
       }
 
       assertThat(surveys).let {
         it.isNotNull()
-        it.hasSize(surveyEntities.size)
-        it.containsExactlyElementsIn(surveyEntities)
+        it.hasSize(testSurveyEntities.size)
+        it.containsExactlyElementsIn(testSurveyEntities)
       }
     }
   }
@@ -123,15 +123,15 @@ class SurveyLocalDataSourceImplTest {
     runBlocking {
       val surveys: List<SurveyEntity> = surveyDao.let {
         it.deleteAll()
-        it.insertItems(listOf(surveyEntities.first(), surveyEntities.last()))
-        it.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
+        it.insertItems(listOf(testSurveyEntities.first(), testSurveyEntities.last()))
+        it.insertItems(testSurveyEntities.takeLast(testSurveyEntities.size - 1))
         return@let it.loadAll()
       }
 
       assertThat(surveys).let {
         it.isNotNull()
-        it.hasSize(surveyEntities.size)
-        it.containsExactlyElementsIn(surveyEntities)
+        it.hasSize(testSurveyEntities.size)
+        it.containsExactlyElementsIn(testSurveyEntities)
       }
     }
   }
@@ -140,7 +140,7 @@ class SurveyLocalDataSourceImplTest {
   fun `DeleteAll will make table Survey empty`() {
     runBlocking {
       val surveys: List<SurveyEntity> = surveyDao.let {
-        it.insertItems(surveyEntities)
+        it.insertItems(testSurveyEntities)
         it.deleteAll()
         return@let it.loadAll()
       }

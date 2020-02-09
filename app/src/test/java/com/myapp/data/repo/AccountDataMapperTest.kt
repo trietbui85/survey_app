@@ -4,11 +4,11 @@ import com.google.common.truth.Truth.assertThat
 import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.remote.model.AccessTokenResponse
 import com.myapp.di.NetworkModule.Companion.DEFAULT_GSON
-import com.myapp.utils.TestData.jsonTokenData
-import com.myapp.utils.TestData.jsonTokenEmpty
-import com.myapp.utils.TestData.tokenEntity
-import com.myapp.utils.TestData.tokenItem
-import com.myapp.utils.TestData.tokenResponse
+import com.myapp.utils.TestData.testJsonToken
+import com.myapp.utils.TestData.testJsonTokenEmpty
+import com.myapp.utils.TestData.testTokenEntity
+import com.myapp.utils.TestData.testTokenItem
+import com.myapp.utils.TestData.testTokenResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Test
@@ -35,9 +35,9 @@ class AccountDataMapperTest {
 
   @Test
   fun fromAccessTokenResponseToItem_ValidResponse_Success() {
-    val item: AccessTokenItem = mapper.fromAccessTokenResponse(tokenResponse)
+    val item: AccessTokenItem = mapper.fromAccessTokenResponse(testTokenResponse)
     assertThat(item).isNotNull()
-    assertThat(item).isEqualTo(tokenItem)
+    assertThat(item).isEqualTo(testTokenItem)
   }
 
   @Test
@@ -49,9 +49,9 @@ class AccountDataMapperTest {
 
   @Test
   fun fromAccessTokenEntityToItem_ValidEntity_Success() {
-    val item: AccessTokenItem = mapper.fromAccessTokenEntity(tokenEntity)
+    val item: AccessTokenItem = mapper.fromAccessTokenEntity(testTokenEntity)
     assertThat(item).isNotNull()
-    assertThat(item).isEqualTo(tokenItem)
+    assertThat(item).isEqualTo(testTokenItem)
   }
 
   @Test
@@ -63,21 +63,21 @@ class AccountDataMapperTest {
 
   @Test
   fun fromAccessTokenItemToEntity_ValidItem_Success() {
-    val entity: AccessTokenEntity = mapper.toAccessTokenEntity(tokenItem)
+    val entity: AccessTokenEntity = mapper.toAccessTokenEntity(testTokenItem)
     assertThat(entity).isNotNull()
-    assertThat(entity).isEqualTo(tokenEntity)
+    assertThat(entity).isEqualTo(testTokenEntity)
   }
 
   @Test
   fun fromAccessTokenEntityToString_EmptyEntity_ReturnJsonWithEmptyData() {
     val strToken = mapper.fromAccessTokenEntityToString(AccessTokenEntity())
-    assertThat(strToken).isEqualTo(jsonTokenEmpty)
+    assertThat(strToken).isEqualTo(testJsonTokenEmpty)
   }
 
   @Test
   fun fromAccessTokenEntityToString_ValidEntity_ReturnJsonData() {
-    val strToken = mapper.fromAccessTokenEntityToString(tokenEntity)
-    assertThat(strToken).isEqualTo(jsonTokenData)
+    val strToken = mapper.fromAccessTokenEntityToString(testTokenEntity)
+    assertThat(strToken).isEqualTo(testJsonToken)
   }
 
   @Test
@@ -103,15 +103,15 @@ class AccountDataMapperTest {
 
   @Test
   fun fromStringToAccessTokenEntity_JsonWithEmptyData_ReturnEmptyEntity() {
-    val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity(jsonTokenEmpty)
+    val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity(testJsonTokenEmpty)
     assertThat(entity).isNotNull()
     assertThat(entity).isEqualTo(AccessTokenEntity())
   }
 
   @Test
   fun fromStringToAccessTokenEntity_ValidJsonData_ReturnEntity() {
-    val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity(jsonTokenData)
+    val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity(testJsonToken)
     assertThat(entity).isNotNull()
-    assertThat(entity).isEqualTo(tokenEntity)
+    assertThat(entity).isEqualTo(testTokenEntity)
   }
 }

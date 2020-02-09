@@ -24,29 +24,29 @@ object TestData {
   private val surveyEntity1 = createSurveyEntity(1)
   private val surveyEntity2 = createSurveyEntity(2)
   private val surveyEntity3 = createSurveyEntity(3)
-  val surveyEntities = listOf(surveyEntity1, surveyEntity2, surveyEntity3)
+  val testSurveyEntities = listOf(surveyEntity1, surveyEntity2, surveyEntity3)
 
   private const val TOKEN_VALUE = "token_data"
   private const val TOKEN_TYPE = "token_type"
   private const val EXPIRED_IN = 2
   private const val CREATED_AT = 1
 
-  val jsonTokenData = buildJsonData(TOKEN_VALUE, TOKEN_TYPE, EXPIRED_IN, CREATED_AT)
-  val jsonTokenEmpty = buildJsonData("", "", 0, 0)
+  val testJsonToken = buildJsonData(TOKEN_VALUE, TOKEN_TYPE, EXPIRED_IN, CREATED_AT)
+  val testJsonTokenEmpty = buildJsonData("", "", 0, 0)
 
-  val tokenEntity = AccessTokenEntity(
+  val testTokenEntity = AccessTokenEntity(
     accessToken = TOKEN_VALUE,
     tokenType = TOKEN_TYPE,
     expiresIn = EXPIRED_IN,
     createdAt = CREATED_AT
   )
-  val tokenResponse = AccessTokenResponse(
+  val testTokenResponse = AccessTokenResponse(
     accessToken = TOKEN_VALUE,
     tokenType = TOKEN_TYPE,
     expiresIn = EXPIRED_IN,
     createdAt = CREATED_AT
   )
-  val tokenItem = AccessTokenItem(
+  val testTokenItem = AccessTokenItem(
     accessToken = TOKEN_VALUE,
     tokenType = TOKEN_TYPE,
     expiresIn = EXPIRED_IN,
