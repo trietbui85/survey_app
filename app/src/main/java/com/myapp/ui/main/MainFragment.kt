@@ -14,6 +14,8 @@ import com.myapp.R
 import com.myapp.data.repo.SurveyItem
 import com.myapp.utils.getErrorText
 import com.myapp.utils.showToastLong
+import com.myapp.utils.toInvisible
+import com.myapp.utils.toVisible
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.main_fragment.fullscreenLoadingView
 import kotlinx.android.synthetic.main.main_fragment.indicator
@@ -84,8 +86,8 @@ class MainFragment : DaggerFragment() {
 
     viewModel.contentLiveData.observe(viewLifecycleOwner, Observer {
       Timber.d("viewModel.contentLiveData: success: $it")
-      loadMoreView.visibility = View.INVISIBLE
-      fullscreenLoadingView.visibility = View.INVISIBLE
+      loadMoreView.toInvisible()
+      fullscreenLoadingView.toInvisible()
       surveyAdapter.setItems(it!!)
 
       val indicatorIndex = viewModel.indicatorIndexLiveData.value ?: -1
@@ -103,16 +105,16 @@ class MainFragment : DaggerFragment() {
         // If is loading
         if (it.second) {
           // is first time
-          loadMoreView.visibility = View.INVISIBLE
-          fullscreenLoadingView.visibility = View.VISIBLE
+          loadMoreView.toInvisible()
+          fullscreenLoadingView.toVisible()
         } else {
-          loadMoreView.visibility = View.VISIBLE
-          fullscreenLoadingView.visibility = View.INVISIBLE
+          loadMoreView.toVisible()
+          fullscreenLoadingView.toInvisible()
         }
       } else {
         // stop loading
-        loadMoreView.visibility = View.INVISIBLE
-        fullscreenLoadingView.visibility = View.INVISIBLE
+        loadMoreView.toInvisible()
+        fullscreenLoadingView.toInvisible()
       }
     })
 
@@ -120,8 +122,8 @@ class MainFragment : DaggerFragment() {
       it.getContentIfNotHandled()
         ?.let { dataException ->
           Timber.d("viewModel.errorLiveEvent: error: $it")
-          loadMoreView.visibility = View.INVISIBLE
-          fullscreenLoadingView.visibility = View.INVISIBLE
+          loadMoreView.toInvisible()
+          fullscreenLoadingView.toInvisible()
 
           val errorText = dataException.getErrorText(requireContext())
           this.showToastLong(errorText)
