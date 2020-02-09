@@ -68,63 +68,82 @@ class SurveyLocalDataSourceImplTest {
   @Test
   fun loadAll_HasDataInDb_ReturnList() {
     runBlocking {
-      surveyDao.deleteAll()
-      surveyDao.insertItems(surveyEntities)
-      val surveys: List<SurveyEntity> = surveyDao.loadAll()
+      val surveys: List<SurveyEntity> = surveyDao.let {
+        it.deleteAll()
+        it.insertItems(surveyEntities)
+        return@let it.loadAll()
+      }
 
-      assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(surveyEntities.size)
-      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
+      assertThat(surveys).let {
+        it.isNotNull()
+        it.hasSize(surveyEntities.size)
+        it.containsExactlyElementsIn(surveyEntities)
+      }
     }
   }
 
   @Test
   fun insertItems_HasNoDataInDb() {
     runBlocking {
-      surveyDao.deleteAll()
-      surveyDao.insertItems(surveyEntities)
-      val surveys: List<SurveyEntity> = surveyDao.loadAll()
+      val surveys: List<SurveyEntity> = surveyDao.let {
+        it.deleteAll()
+        it.insertItems(surveyEntities)
+        return@let it.loadAll()
+      }
 
-      assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(surveyEntities.size)
-      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
+      assertThat(surveys).let {
+        it.isNotNull()
+        it.hasSize(surveyEntities.size)
+        it.containsExactlyElementsIn(surveyEntities)
+      }
     }
   }
 
   @Test
   fun insertItems_HasExistingDataInDb() {
     runBlocking {
-      surveyDao.deleteAll()
-      surveyDao.insertItems(listOf(surveyEntities.first()))
-      surveyDao.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
 
-      val surveys: List<SurveyEntity> = surveyDao.loadAll()
-      assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(surveyEntities.size)
-      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
+      val surveys: List<SurveyEntity> = surveyDao.let {
+        it.deleteAll()
+        it.insertItems(listOf(surveyEntities.first()))
+        it.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
+        return@let it.loadAll()
+      }
+
+      assertThat(surveys).let {
+        it.isNotNull()
+        it.hasSize(surveyEntities.size)
+        it.containsExactlyElementsIn(surveyEntities)
+      }
     }
   }
 
   @Test
   fun insertItems_DuplicatedDataInDb() {
     runBlocking {
-      surveyDao.deleteAll()
-      surveyDao.insertItems(listOf(surveyEntities.first()))
-      surveyDao.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
+      val surveys: List<SurveyEntity> = surveyDao.let {
+        it.deleteAll()
+        it.insertItems(listOf(surveyEntities.first(), surveyEntities.last()))
+        it.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
+        return@let it.loadAll()
+      }
 
-      val surveys: List<SurveyEntity> = surveyDao.loadAll()
-      assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(surveyEntities.size)
-      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
+      assertThat(surveys).let {
+        it.isNotNull()
+        it.hasSize(surveyEntities.size)
+        it.containsExactlyElementsIn(surveyEntities)
+      }
     }
   }
 
   @Test
   fun `DeleteAll will make table Survey empty`() {
     runBlocking {
-      surveyDao.insertItems(surveyEntities)
-      surveyDao.deleteAll()
-      val surveys: List<SurveyEntity> = surveyDao.loadAll()
+      val surveys: List<SurveyEntity> = surveyDao.let {
+        it.insertItems(surveyEntities)
+        it.deleteAll()
+        return@let it.loadAll()
+      }
       assertThat(surveys).isEmpty()
     }
   }
