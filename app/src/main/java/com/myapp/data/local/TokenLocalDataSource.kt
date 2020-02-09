@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
 import com.myapp.data.local.TokenLocalDataSource.Companion.KEY_ACCESS_TOKEN
 import com.myapp.data.local.db.AccessTokenEntity
-import com.myapp.data.repo.AccountDataMapper
+import com.myapp.data.repo.AccountItemMapper
 
 // TokenDataSource is the interface to let repository interact with Token data (which is saved
 // in SharedPreferences)
@@ -21,7 +21,7 @@ interface TokenLocalDataSource {
 
 class TokenLocalDataSourceImpl(
   private val pref: SharedPreferences,
-  private val mapper: AccountDataMapper
+  private val mapper: AccountItemMapper
 ) : TokenLocalDataSource {
   override fun loadTokenFromCache(): AccessTokenEntity? {
     val strToken = pref.getString(KEY_ACCESS_TOKEN, "")

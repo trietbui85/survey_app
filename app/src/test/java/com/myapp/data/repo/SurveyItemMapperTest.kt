@@ -8,8 +8,8 @@ import com.myapp.utils.TestData.testSurveyItem
 import com.myapp.utils.TestData.testSurveyResponse
 import org.junit.Test
 
-class SurveyDataMapperTest {
-  private val mapper = SurveyDataMapper()
+class SurveyItemMapperTest {
+  private val mapper = SurveyItemMapper()
 
   @Test
   fun fromSurveyItemToEntity_EmptyItem_ReturnSuccess() {

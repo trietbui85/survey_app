@@ -15,7 +15,7 @@ interface SurveyRepository {
 
 class SurveyRepositoryImpl @Inject constructor(
   private val surveyRemoteDataSource: SurveyRemoteDataSource,
-  private val mapper: SurveyDataMapper
+    private val mapper: SurveyItemMapper
 ) : SurveyRepository {
   override suspend fun loadSurveys(
     pageNumber: Int,

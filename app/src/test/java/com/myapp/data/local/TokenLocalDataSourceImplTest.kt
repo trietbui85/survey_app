@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.myapp.data.local.db.AccessTokenEntity
-import com.myapp.data.repo.AccountDataMapper
+import com.myapp.data.repo.AccountItemMapper
 import com.myapp.di.NetworkModule.Companion.DEFAULT_GSON
 import com.myapp.ui.SurveyApp
 import com.myapp.utils.TestData.testJsonToken
@@ -37,7 +37,7 @@ class TokenLocalDataSourceImplTest {
   fun setUp() {
     val app = ApplicationProvider.getApplicationContext() as SurveyApp
     pref = app.getSharedPreferences("survey", Context.MODE_PRIVATE)
-    dataSource = TokenLocalDataSourceImpl(pref, mapper = AccountDataMapper(DEFAULT_GSON))
+    dataSource = TokenLocalDataSourceImpl(pref, mapper = AccountItemMapper(DEFAULT_GSON))
 
     Dispatchers.setMain(testDispatcher)
   }

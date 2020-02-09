@@ -13,7 +13,7 @@ interface AccountRepository {
 class AccountRepositoryImpl @Inject constructor(
   private val remoteDataSource: TokenRemoteDataSource,
   private val localDataSource: TokenLocalDataSource,
-  private val mapper: AccountDataMapper
+    private val mapper: AccountItemMapper
 ) : AccountRepository {
   override suspend fun getTokenFromCache(): AccessTokenItem? {
     val tokenEntity = localDataSource.loadTokenFromCache() ?: return null

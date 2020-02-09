@@ -7,7 +7,7 @@ import com.myapp.data.remote.model.AccessTokenResponse
 import com.myapp.data.remote.model.SurveyResponse
 import javax.inject.Inject
 
-class SurveyDataMapper @Inject constructor() {
+class SurveyItemMapper @Inject constructor() {
 
   fun fromSurveyResponse(response: SurveyResponse) = SurveyItem(
       id = response.id,
@@ -31,7 +31,7 @@ class SurveyDataMapper @Inject constructor() {
   )
 }
 
-class AccountDataMapper @Inject constructor(private val gson: Gson) {
+class AccountItemMapper @Inject constructor(private val gson: Gson) {
   fun fromAccessTokenResponse(response: AccessTokenResponse) = AccessTokenItem(
       accessToken = response.accessToken,
       tokenType = response.tokenType,

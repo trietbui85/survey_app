@@ -17,7 +17,7 @@ class AccountRepositoryImplTest {
 
   private val remoteDataSource: TokenRemoteDataSource = mock()
   private val localDataSource: TokenLocalDataSource = mock()
-  private val mapper: AccountDataMapper = mock()
+  private val mapper: AccountItemMapper = mock()
 
   private lateinit var accountRepository: AccountRepositoryImpl
 

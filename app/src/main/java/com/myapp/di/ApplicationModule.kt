@@ -16,7 +16,7 @@ import com.myapp.data.remote.TokenApiService
 import com.myapp.data.remote.TokenAuthenticator
 import com.myapp.data.remote.TokenRemoteDataSource
 import com.myapp.data.remote.TokenRemoteDataSourceImpl
-import com.myapp.data.repo.AccountDataMapper
+import com.myapp.data.repo.AccountItemMapper
 import com.myapp.data.repo.AccountRepository
 import com.myapp.data.repo.AccountRepositoryImpl
 import com.myapp.data.repo.SurveyRepository
@@ -44,7 +44,7 @@ class ApplicationModule {
     @Provides
     fun provideTokenLocalDataSource(
         pref: SharedPreferences,
-        mapper: AccountDataMapper
+        mapper: AccountItemMapper
     ): TokenLocalDataSource {
         return TokenLocalDataSourceImpl(pref, mapper)
     }
@@ -86,7 +86,7 @@ class ApplicationModule {
 
     @Singleton
     @Provides
-    fun provideAccountDataMapper(gson: Gson): AccountDataMapper = AccountDataMapper(gson)
+    fun provideAccountDataMapper(gson: Gson): AccountItemMapper = AccountItemMapper(gson)
 
     @Singleton
     @Provides

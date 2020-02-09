@@ -14,13 +14,13 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class AccountDataMapperTest {
+class AccountItemMapperTest {
 
-  private lateinit var mapper: AccountDataMapper
+  private lateinit var mapper: AccountItemMapper
 
   @Before
   fun setUp() {
-    mapper = AccountDataMapper(
+    mapper = AccountItemMapper(
       gson = DEFAULT_GSON
     )
   }
