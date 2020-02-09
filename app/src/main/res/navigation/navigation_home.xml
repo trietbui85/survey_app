@@ -11,12 +11,21 @@
       android:label="main_fragment"
       tools:layout="@layout/main_fragment">
     <action
-        android:id="@+id/action_mainFragment_to_detailFragment"
-        app:destination="@id/detailFragment" />
+        android:id="@+id/action_to_detailFragment"
+        app:destination="@id/detailFragment"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popUpTo="@+id/mainFragment" />
   </fragment>
   <fragment
       android:id="@+id/detailFragment"
       tools:layout="@layout/detail_fragment"
       android:name="com.myapp.ui.detail.DetailFragment"
-      android:label="DetailFragment" />
+      android:label="DetailFragment">
+    <argument
+        android:name="surveyItem"
+        app:argType="com.myapp.data.repo.SurveyItem" />
+  </fragment>
 </navigation>
