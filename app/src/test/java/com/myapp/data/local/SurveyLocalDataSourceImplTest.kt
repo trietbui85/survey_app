@@ -7,6 +7,7 @@ import com.myapp.data.local.db.SurveyDao
 import com.myapp.data.local.db.SurveyDatabase
 import com.myapp.data.local.db.SurveyEntity
 import com.myapp.ui.SurveyApp
+import com.myapp.utils.TestData.surveyEntities
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -68,12 +69,12 @@ class SurveyLocalDataSourceImplTest {
   fun loadAll_HasDataInDb_ReturnList() {
     runBlocking {
       surveyDao.deleteAll()
-      surveyDao.insertItems(listSurveys)
+      surveyDao.insertItems(surveyEntities)
       val surveys: List<SurveyEntity> = surveyDao.loadAll()
 
       assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(listSurveys.size)
-      assertThat(surveys).containsExactlyElementsIn(listSurveys)
+      assertThat(surveys).hasSize(surveyEntities.size)
+      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
     }
   }
 
@@ -81,12 +82,12 @@ class SurveyLocalDataSourceImplTest {
   fun insertItems_HasNoDataInDb() {
     runBlocking {
       surveyDao.deleteAll()
-      surveyDao.insertItems(listSurveys)
+      surveyDao.insertItems(surveyEntities)
       val surveys: List<SurveyEntity> = surveyDao.loadAll()
 
       assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(listSurveys.size)
-      assertThat(surveys).containsExactlyElementsIn(listSurveys)
+      assertThat(surveys).hasSize(surveyEntities.size)
+      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
     }
   }
 
@@ -94,13 +95,13 @@ class SurveyLocalDataSourceImplTest {
   fun insertItems_HasExistingDataInDb() {
     runBlocking {
       surveyDao.deleteAll()
-      surveyDao.insertItems(listOf(survey1, survey2))
-      surveyDao.insertItems(listOf(survey3, survey4, survey5))
+      surveyDao.insertItems(listOf(surveyEntities.first()))
+      surveyDao.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
 
       val surveys: List<SurveyEntity> = surveyDao.loadAll()
       assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(listSurveys.size)
-      assertThat(surveys).containsExactlyElementsIn(listSurveys)
+      assertThat(surveys).hasSize(surveyEntities.size)
+      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
     }
   }
 
@@ -108,36 +109,24 @@ class SurveyLocalDataSourceImplTest {
   fun insertItems_DuplicatedDataInDb() {
     runBlocking {
       surveyDao.deleteAll()
-      surveyDao.insertItems(listOf(survey1, survey2))
-      surveyDao.insertItems(listOf(survey2, survey3, survey4, survey5))
+      surveyDao.insertItems(listOf(surveyEntities.first()))
+      surveyDao.insertItems(surveyEntities.takeLast(surveyEntities.size - 1))
 
       val surveys: List<SurveyEntity> = surveyDao.loadAll()
       assertThat(surveys).isNotNull()
-      assertThat(surveys).hasSize(listSurveys.size)
-      assertThat(surveys).containsExactlyElementsIn(listSurveys)
+      assertThat(surveys).hasSize(surveyEntities.size)
+      assertThat(surveys).containsExactlyElementsIn(surveyEntities)
     }
   }
 
   @Test
   fun `DeleteAll will make table Survey empty`() {
     runBlocking {
-      surveyDao.insertItems(listSurveys)
+      surveyDao.insertItems(surveyEntities)
       surveyDao.deleteAll()
       val surveys: List<SurveyEntity> = surveyDao.loadAll()
       assertThat(surveys).isEmpty()
     }
   }
 
-  private companion object {
-    private fun createSurveyEntity(index: Int) = SurveyEntity(
-        "id $index", "title $index", "description $index", "image $index"
-    )
-
-    private val survey1 = createSurveyEntity(1)
-    private val survey2 = createSurveyEntity(2)
-    private val survey3 = createSurveyEntity(3)
-    private val survey4 = createSurveyEntity(4)
-    private val survey5 = createSurveyEntity(5)
-    private val listSurveys = listOf(survey1, survey2, survey3, survey4, survey5)
-  }
 }
