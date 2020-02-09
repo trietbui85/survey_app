@@ -16,7 +16,7 @@ import retrofit2.Response
 class SurveyRepositoryImplTest {
 
   private val remoteDataSource: SurveyRemoteDataSource = mock()
-  private val mapper: SurveyDataMapper = mock()
+  private val mapper: SurveyItemMapper = mock()
 
   private lateinit var surveyRepository: SurveyRepositoryImpl
 

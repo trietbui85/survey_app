@@ -23,6 +23,11 @@ import javax.inject.Singleton
 @Module
 class NetworkModule {
 
+  companion object {
+    val DEFAULT_GSON = GsonBuilder().setFieldNamingPolicy(
+      FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES
+    ).create()
+  }
   @Singleton
   @Provides
   @Named("NumOfItemPerPage")
@@ -65,9 +70,7 @@ class NetworkModule {
 
   @Singleton
   @Provides
-  fun provideGson(): Gson = GsonBuilder().setFieldNamingPolicy(
-      FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES
-  ).create()
+  fun provideGson(): Gson = DEFAULT_GSON
 
   @Singleton
   @Provides

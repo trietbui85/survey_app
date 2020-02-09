@@ -4,11 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import com.myapp.data.local.db.AccessTokenEntity
-import com.myapp.data.repo.AccountDataMapper
+import com.myapp.data.repo.AccountItemMapper
+import com.myapp.di.NetworkModule.Companion.DEFAULT_GSON
 import com.myapp.ui.SurveyApp
+import com.myapp.utils.TestData.testJsonToken
+import com.myapp.utils.TestData.testTokenEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -36,7 +37,7 @@ class TokenLocalDataSourceImplTest {
   fun setUp() {
     val app = ApplicationProvider.getApplicationContext() as SurveyApp
     pref = app.getSharedPreferences("survey", Context.MODE_PRIVATE)
-    dataSource = TokenLocalDataSourceImpl(pref, mapper = AccountDataMapper(DEFAULT_GSON))
+    dataSource = TokenLocalDataSourceImpl(pref, mapper = AccountItemMapper(DEFAULT_GSON))
 
     Dispatchers.setMain(testDispatcher)
   }
@@ -49,14 +50,14 @@ class TokenLocalDataSourceImplTest {
 
   private fun clearTextDataForSharedPref() {
     pref.edit()
-        .clear()
-        .apply()
+      .clear()
+      .apply()
   }
 
   private fun setTextDataForSharedPref(text: String?) {
     pref.edit()
-        .putString(TokenLocalDataSource.KEY_ACCESS_TOKEN, text)
-        .apply()
+      .putString(TokenLocalDataSource.KEY_ACCESS_TOKEN, text)
+      .apply()
   }
 
   @Test
@@ -89,19 +90,16 @@ class TokenLocalDataSourceImplTest {
 
   @Test
   fun loadTokenFromCache_ValidDataInSharedPref_ReturnSuccess() = runBlockingTest(testDispatcher) {
-    setTextDataForSharedPref(STRING_TOKEN_DATA)
+    setTextDataForSharedPref(testJsonToken)
     val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
 
     assertThat(entity).isNotNull()
-    assertThat(entity!!.accessToken).isEqualTo(TOKEN_VALUE)
-    assertThat(entity.tokenType).isEqualTo(TOKEN_TYPE)
-    assertThat(entity.expiresIn).isEqualTo(EXPIRED_IN)
-    assertThat(entity.createdAt).isEqualTo(CREATED_AT)
+    assertThat(entity).isEqualTo(testTokenEntity)
   }
 
   @Test
   fun removeTokenFromCache_HasDataInSharedPref_ReturnSuccess() = runBlockingTest(testDispatcher) {
-    setTextDataForSharedPref(STRING_TOKEN_DATA)
+    setTextDataForSharedPref(testJsonToken)
     dataSource.removeTokenFromCache()
 
     val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
@@ -122,50 +120,22 @@ class TokenLocalDataSourceImplTest {
   fun saveTokenToCache_HasNoDataInSharedPref_ReturnSuccess() =
     runBlockingTest(testDispatcher) {
       clearTextDataForSharedPref()
-      dataSource.saveTokenToCache(DEFAULT_TOKEN_ENTITY)
+      dataSource.saveTokenToCache(testTokenEntity)
 
       val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
       assertThat(entity).isNotNull()
-      assertThat(entity!!.accessToken).isEqualTo(TOKEN_VALUE)
-      assertThat(entity.tokenType).isEqualTo(TOKEN_TYPE)
-      assertThat(entity.expiresIn).isEqualTo(EXPIRED_IN)
-      assertThat(entity.createdAt).isEqualTo(CREATED_AT)
+      assertThat(entity).isEqualTo(testTokenEntity)
     }
 
   @Test
   fun saveTokenToCache_HasDataInSharedPref_ReturnSuccess() =
     runBlockingTest(testDispatcher) {
-      setTextDataForSharedPref(STRING_TOKEN_DATA)
-      dataSource.saveTokenToCache(DEFAULT_TOKEN_ENTITY)
+      setTextDataForSharedPref(testJsonToken)
+      dataSource.saveTokenToCache(testTokenEntity)
 
       val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
       assertThat(entity).isNotNull()
-      assertThat(entity!!.accessToken).isEqualTo(TOKEN_VALUE)
-      assertThat(entity.tokenType).isEqualTo(TOKEN_TYPE)
-      assertThat(entity.expiresIn).isEqualTo(EXPIRED_IN)
-      assertThat(entity.createdAt).isEqualTo(CREATED_AT)
+      assertThat(entity).isEqualTo(testTokenEntity)
     }
 
-  companion object {
-    private val DEFAULT_GSON = GsonBuilder().setFieldNamingPolicy(
-        FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES
-    )
-        .create()
-
-    private const val TOKEN_VALUE = "token_data"
-    private const val TOKEN_TYPE = "token_type"
-    private const val EXPIRED_IN = 2
-    private const val CREATED_AT = 1
-
-    private val STRING_TOKEN_DATA = """
-            {"access_token":"$TOKEN_VALUE","token_type":"$TOKEN_TYPE","expires_in":$EXPIRED_IN,"created_at":$CREATED_AT}
-        """.trimIndent()
-
-    private val DEFAULT_TOKEN_ENTITY = AccessTokenEntity(
-        accessToken = TOKEN_VALUE,
-        tokenType = TOKEN_TYPE,
-        expiresIn = EXPIRED_IN,
-        createdAt = CREATED_AT
-    )
-  }
 }
