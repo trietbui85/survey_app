@@ -1,9 +1,10 @@
 package com.myapp.data.repo
 
 import com.myapp.data.local.TokenLocalDataSource
-import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.remote.TokenRemoteDataSource
-import com.myapp.data.remote.model.AccessTokenResponse
+import com.myapp.utils.TestData.testTokenEntity
+import com.myapp.utils.TestData.testTokenItem
+import com.myapp.utils.TestData.testTokenResponse
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -20,16 +21,6 @@ class AccountRepositoryImplTest {
 
   private lateinit var accountRepository: AccountRepositoryImpl
 
-  private val tokenEntity = AccessTokenEntity(
-      accessToken = "token_data"
-  )
-  private val tokenResponse = AccessTokenResponse(
-      accessToken = "token_data"
-  )
-  private val tokenItem = AccessTokenItem(
-      accessToken = "token_data"
-  )
-
   @Before
   fun setUp() {
     accountRepository = AccountRepositoryImpl(remoteDataSource, localDataSource, mapper)
@@ -38,27 +29,27 @@ class AccountRepositoryImplTest {
   @Test
   fun getTokenFromCache_HappyCase() {
     runBlocking {
-      whenever(localDataSource.loadTokenFromCache()) doReturn tokenEntity
+      whenever(localDataSource.loadTokenFromCache()) doReturn testTokenEntity
       accountRepository.getTokenFromCache()
 
       verify(localDataSource).loadTokenFromCache()
-      verify(mapper).fromAccessTokenEntity(tokenEntity)
+      verify(mapper).fromAccessTokenEntity(testTokenEntity)
     }
   }
 
   @Test
   fun refreshToken_HappyCase() {
     runBlocking {
-      whenever(remoteDataSource.refreshAccessToken()) doReturn tokenResponse
-      whenever(mapper.fromAccessTokenResponse(tokenResponse)) doReturn tokenItem
-      whenever(mapper.toAccessTokenEntity(tokenItem)) doReturn tokenEntity
+      whenever(remoteDataSource.refreshAccessToken()) doReturn testTokenResponse
+      whenever(mapper.fromAccessTokenResponse(testTokenResponse)) doReturn testTokenItem
+      whenever(mapper.toAccessTokenEntity(testTokenItem)) doReturn testTokenEntity
 
       accountRepository.refreshToken()
 
       verify(localDataSource).removeTokenFromCache()
-      verify(mapper).fromAccessTokenResponse(tokenResponse)
-      verify(mapper).toAccessTokenEntity(tokenItem)
-      verify(localDataSource).saveTokenToCache(tokenEntity)
+      verify(mapper).fromAccessTokenResponse(testTokenResponse)
+      verify(mapper).toAccessTokenEntity(testTokenItem)
+      verify(localDataSource).saveTokenToCache(testTokenEntity)
     }
   }
 }
