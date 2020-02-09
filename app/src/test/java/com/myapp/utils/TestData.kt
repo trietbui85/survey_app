@@ -2,11 +2,24 @@ package com.myapp.utils
 
 import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.local.db.SurveyEntity
+import com.myapp.data.remote.model.AccessTokenResponse
+import com.myapp.data.repo.AccessTokenItem
 
 object TestData {
   private fun createSurveyEntity(index: Int) = SurveyEntity(
     "id $index", "title $index", "description $index", "image $index"
   )
+
+  private fun buildJsonData(
+    token: String,
+    tokenType: String,
+    expiresIn: Int,
+    createdAt: Int
+  ): String {
+    return """
+            {"access_token":"$token","token_type":"$tokenType","expires_in":$expiresIn,"created_at":$createdAt}
+        """.trimIndent()
+  }
 
   private val surveyEntity1 = createSurveyEntity(1)
   private val surveyEntity2 = createSurveyEntity(2)
@@ -18,11 +31,22 @@ object TestData {
   private const val EXPIRED_IN = 2
   private const val CREATED_AT = 1
 
-  val jsonTokenData = """
-            {"access_token":"$TOKEN_VALUE","token_type":"$TOKEN_TYPE","expires_in":$EXPIRED_IN,"created_at":$CREATED_AT}
-        """.trimIndent()
+  val jsonTokenData = buildJsonData(TOKEN_VALUE, TOKEN_TYPE, EXPIRED_IN, CREATED_AT)
+  val jsonTokenEmpty = buildJsonData("", "", 0, 0)
 
   val tokenEntity = AccessTokenEntity(
+    accessToken = TOKEN_VALUE,
+    tokenType = TOKEN_TYPE,
+    expiresIn = EXPIRED_IN,
+    createdAt = CREATED_AT
+  )
+  val tokenResponse = AccessTokenResponse(
+    accessToken = TOKEN_VALUE,
+    tokenType = TOKEN_TYPE,
+    expiresIn = EXPIRED_IN,
+    createdAt = CREATED_AT
+  )
+  val tokenItem = AccessTokenItem(
     accessToken = TOKEN_VALUE,
     tokenType = TOKEN_TYPE,
     expiresIn = EXPIRED_IN,
