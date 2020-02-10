@@ -3,6 +3,7 @@ package com.myapp.ui.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.myapp.R
@@ -42,8 +43,11 @@ class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
   }
 
   fun setItems(list: MutableList<SurveyItem>) {
+    val diffCallback = SurveyDiffCallback(surveyItems, list)
+    val diffResult = DiffUtil.calculateDiff(diffCallback)
+
     this.surveyItems = list
-    notifyDataSetChanged()
+    diffResult.dispatchUpdatesTo(this)
   }
 
   fun clearItems() {
@@ -53,3 +57,25 @@ class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
 }
 
 class PagerVH(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+internal class SurveyDiffCallback(
+  private val oldItems: List<SurveyItem>,
+  private val newItems: List<SurveyItem>
+) : DiffUtil.Callback() {
+  override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldItems[oldItemPosition].id == newItems[newItemPosition].id
+  }
+
+  override fun getOldListSize(): Int {
+    return oldItems.size
+  }
+
+  override fun getNewListSize(): Int {
+    return newItems.size
+  }
+
+  override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    return oldItems[oldItemPosition] == newItems[newItemPosition]
+  }
+
+}
