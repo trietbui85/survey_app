@@ -16,4 +16,7 @@ data class AccessTokenItem(
   val tokenType: String = "",
   val expiresIn: Int = 0,
   val createdAt: Int = 0
-)
+) {
+  // Get the Bearer Token from an accessToken
+  val bearerToken = "Bearer ${this.accessToken}"
+}

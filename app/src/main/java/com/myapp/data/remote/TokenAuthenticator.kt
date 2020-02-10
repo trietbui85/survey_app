@@ -2,7 +2,6 @@ package com.myapp.data.remote
 
 import com.myapp.data.repo.AccessTokenItem
 import com.myapp.data.repo.AccountRepository
-import com.myapp.utils.toBearerToken
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -55,7 +54,7 @@ class TokenAuthenticator(
     Timber.d("After have new token=$accessToken, continue request=$request")
     return request.newBuilder()
         .removeHeader("Authorization")
-        .header("Authorization", accessToken.toBearerToken())
+      .header("Authorization", accessToken.bearerToken)
         .build()
   }
 }
