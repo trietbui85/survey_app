@@ -28,10 +28,6 @@ import javax.inject.Inject
 
 class MainFragment : DaggerFragment() {
 
-  companion object {
-    fun newInstance() = MainFragment()
-  }
-
   @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -55,7 +51,7 @@ class MainFragment : DaggerFragment() {
       Timber.d("launchWhenCreated: last indicatorIndexLiveData=$indicatorIndex")
       if (indicatorIndex < 0) {
         // If no existing LiveData for content, let fetch data
-        viewModel.fetchSurveys(1)
+        viewModel.fetchSurveys()
       }
 
     }
@@ -99,22 +95,21 @@ class MainFragment : DaggerFragment() {
       indicator.setViewPager(viewPager)
     })
 
-    viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
-      Timber.d("viewModel.loadingLiveData: is loading: $it")
-      if (it.first) {
-        // If is loading
-        if (it.second) {
-          // is first time
-          loadMoreView.toInvisible()
-          fullscreenLoadingView.toVisible()
-        } else {
-          loadMoreView.toVisible()
-          fullscreenLoadingView.toInvisible()
-        }
+    viewModel.loadingFullscreenLiveData.observe(viewLifecycleOwner, Observer {
+      Timber.d("viewModel.loadingFullscreenLiveData: is loading: $it")
+      if (it) {
+        fullscreenLoadingView.toVisible()
       } else {
-        // stop loading
-        loadMoreView.toInvisible()
         fullscreenLoadingView.toInvisible()
+      }
+    })
+
+    viewModel.loadingMoreLiveData.observe(viewLifecycleOwner, Observer {
+      Timber.d("viewModel.loadingMoreLiveData: is loading: $it")
+      if (it) {
+        loadMoreView.toVisible()
+      } else {
+        loadMoreView.toInvisible()
       }
     })
 
@@ -122,8 +117,6 @@ class MainFragment : DaggerFragment() {
       it.getContentIfNotHandled()
         ?.let { dataException ->
           Timber.d("viewModel.errorLiveEvent: error: $it")
-          loadMoreView.toInvisible()
-          fullscreenLoadingView.toInvisible()
 
           val errorText = dataException.getErrorText(requireContext())
           this.showToastLong(errorText)
@@ -134,7 +127,7 @@ class MainFragment : DaggerFragment() {
   private fun initViewAndAction() {
     refreshButton.setOnClickListener {
       surveyAdapter.clearItems()
-      viewModel.fetchSurveys(1, true)
+      viewModel.fetchSurveys(forceReload = true)
     }
     menuButton.setOnClickListener {
       // No action for Menu More, thus just show a Toast

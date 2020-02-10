@@ -42,17 +42,19 @@ class MainViewModelTest {
   @Before
   fun setUp() {
     MockKAnnotations.init(this)
-    viewModel = MainViewModel(surveyRepository, 5, dispatcher, dispatcher)
+    viewModel = MainViewModel(surveyRepository, 5, dispatcher)
   }
 
   @Test
   fun fetchSurveys_FirstPageAndSuccess_ThenWithTheseResults() = runBlocking {
-    val pageNumber = 1
-    val isFullscreen = pageNumber == 1
+    val pageNumber = 0
     coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultSuccess
 
-    val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
-    viewModel.loadingLiveData.observeForever(loadingObserver)
+    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
+
+    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
 
     val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
@@ -66,11 +68,11 @@ class MainViewModelTest {
       // reset data when load first page
       contentObserver.onChanged(mutableListOf())
       // is loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+      loadingFullscreenObserver.onChanged(true)
       // receive success data
       contentObserver.onChanged(resultSuccess.data)
       // stop loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+      loadingFullscreenObserver.onChanged(false)
     }
 
     assertThat(viewModel.getCurrentPage()).isEqualTo(pageNumber)
@@ -78,12 +80,14 @@ class MainViewModelTest {
 
   @Test
   fun fetchSurveys_FirstPageAndFailed_ThenWithTheseResults() = runBlocking {
-    val pageNumber = 1
-    val isFullscreen = pageNumber == 1
+    val pageNumber = 0
     coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultError
 
-    val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
-    viewModel.loadingLiveData.observeForever(loadingObserver)
+    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
+
+    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
 
     val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
@@ -97,23 +101,25 @@ class MainViewModelTest {
       // reset data when load first page
       contentObserver.onChanged(mutableListOf())
       // is loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+      loadingFullscreenObserver.onChanged(true)
       // receive error
       errorObserver.onChanged(LiveEvent(resultError.exception!!))
       // stop loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+      loadingFullscreenObserver.onChanged(false)
     }
     assertThat(viewModel.getCurrentPage()).isLessThan(pageNumber)
   }
 
   @Test
   fun fetchSurveys_SecondPageAndSuccess_ThenWithTheseResults() = runBlocking {
-    val pageNumber = 2
-    val isFullscreen = pageNumber == 1
+    val pageNumber = 1
     coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultSuccess
 
-    val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
-    viewModel.loadingLiveData.observeForever(loadingObserver)
+    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
+
+    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
 
     val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
@@ -123,23 +129,25 @@ class MainViewModelTest {
     verifySequence {
       // there will be NO reset data when load second page
       // first is loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+      loadingMoreObserver.onChanged(true)
       // receive success data
       contentObserver.onChanged(resultSuccess.data)
       // stop loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+      loadingMoreObserver.onChanged(false)
     }
     assertThat(viewModel.getCurrentPage()).isEqualTo(pageNumber)
   }
 
   @Test
   fun fetchSurveys_SecondPageAndFailed_ThenWithTheseResults() = runBlocking {
-    val pageNumber = 2
-    val isFullscreen = pageNumber == 1
+    val pageNumber = 1
     coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultError
 
-    val loadingObserver = mockk<Observer<Pair<Boolean, Boolean>>>(relaxed = true)
-    viewModel.loadingLiveData.observeForever(loadingObserver)
+    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
+
+    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
+    viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
 
     val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
     viewModel.errorLiveEvent.observeForever(errorObserver)
@@ -149,11 +157,11 @@ class MainViewModelTest {
     verifySequence {
       // there will be NO reset data when load second page
       // is loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = true, second = isFullscreen))
+      loadingMoreObserver.onChanged(true)
       // receive error
       errorObserver.onChanged(LiveEvent(resultError.exception!!))
       // stop loading, will fullscreen
-      loadingObserver.onChanged(Pair(first = false, second = isFullscreen))
+      loadingMoreObserver.onChanged(false)
     }
     // Make sure if failed, then currentPage is previous page
     assertThat(viewModel.getCurrentPage()).isEqualTo(pageNumber - 1)

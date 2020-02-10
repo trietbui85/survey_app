@@ -20,19 +20,18 @@ import javax.inject.Named
 class MainViewModel @Inject constructor(
   private val surveyRepository: SurveyRepository,
   @Named("NumOfItemPerPage") private val numOfItemPerPage: Int,
-  @Named("MainDispatcher") private val mainDispatcher: CoroutineDispatcher,
-  @Named("IoDispatcher") private val ioDispatcher: CoroutineDispatcher
+  @Named("MainDispatcher") private val mainDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-  // Current page to load network data, is 1-based
-  private var _currentPage = 1
+  // Current page to load network data, is 0-based
+  private var _currentPage = START_PAGE_NUMBER
 
-  // private val _pageNumberLiveData = MutableLiveData<Int>()
-  // Pair<Boolean, Boolean> mean <IsLoading, IsFirstPage>
-  private val _loadingLiveData = MutableLiveData<Pair<Boolean, Boolean>>()
+  // By default, use fullscreen loading in the first time
+  private val _loadingFullscreenLiveData = MutableLiveData<Boolean>()
+  private val _loadingMoreLiveData = MutableLiveData<Boolean>()
   private val _errorLiveEvent = MutableLiveData<LiveEvent<DataException>>()
   private val _contentLiveData = MutableLiveData<MutableList<SurveyItem>>()
-  // -1 mean invalid index, because the ViewPager will have the 0-based index
+  // -1 means invalid index, because the ViewPager will have the 0-based index
   private val _indicatorIndexLiveData = MutableLiveData(-1)
 
   val indicatorIndexLiveData: LiveData<Int>
@@ -41,8 +40,11 @@ class MainViewModel @Inject constructor(
   val contentLiveData: LiveData<MutableList<SurveyItem>>
     get() = _contentLiveData
 
-  val loadingLiveData: LiveData<Pair<Boolean, Boolean>>
-    get() = _loadingLiveData
+  val loadingFullscreenLiveData: LiveData<Boolean>
+    get() = _loadingFullscreenLiveData
+
+  val loadingMoreLiveData: LiveData<Boolean>
+    get() = _loadingMoreLiveData
 
   val errorLiveEvent: LiveData<LiveEvent<DataException>>
     get() = _errorLiveEvent
@@ -51,16 +53,22 @@ class MainViewModel @Inject constructor(
   fun getCurrentPage() = _currentPage
 
   fun fetchSurveys(
-    pageNumber: Int = 1,
+    pageNumber: Int = START_PAGE_NUMBER,
     forceReload: Boolean = false
   ) {
     Timber.d("Start fetching survey of page $pageNumber")
 
     fun fetchSurveysForPage(pageNumber: Int) {
       _currentPage = pageNumber
-      val showFullscreenLoading = _currentPage == 1
+      val showFullscreenLoading = _currentPage == START_PAGE_NUMBER
+
       viewModelScope.launch(mainDispatcher) {
-        _loadingLiveData.value = Pair(true, showFullscreenLoading)
+        // Only notify change of fullscreenLoading if showFullscreenLoading is true
+        if (showFullscreenLoading) {
+          _loadingFullscreenLiveData.value = true
+        } else {
+          _loadingMoreLiveData.value = true
+        }
         val result: Result<List<SurveyItem>> =
           surveyRepository.loadSurveys(_currentPage, numOfItemPerPage)
         if (result.status == Result.Status.SUCCESS) {
@@ -80,18 +88,20 @@ class MainViewModel @Inject constructor(
           _currentPage--
         }
 
-        _loadingLiveData.value = Pair(false, showFullscreenLoading)
+        if (showFullscreenLoading) {
+          _loadingFullscreenLiveData.value = false
+        } else {
+          _loadingMoreLiveData.value = false
+        }
       }
     }
 
     when {
-      forceReload || pageNumber == 1 -> {
-        // If force reload, will clear the list content
-        _currentPage = 1
+      forceReload || pageNumber == START_PAGE_NUMBER -> {
         _contentLiveData.value = mutableListOf()
         _indicatorIndexLiveData.value = -1
 
-        fetchSurveysForPage(1)
+        fetchSurveysForPage(START_PAGE_NUMBER)
       }
       pageNumber != _currentPage -> {
         fetchSurveysForPage(pageNumber)
@@ -106,7 +116,7 @@ class MainViewModel @Inject constructor(
   // Loading next page. Return TRUE if can continue loading, otherwise FALSE if loading is
   // in progress already and we must wait for
   fun loadNextPage(): Boolean {
-    if (_loadingLiveData.value?.first == true) {
+    if (_loadingFullscreenLiveData.value == true || _loadingMoreLiveData.value == true) {
       Timber.d("Is still fetching data for page $_currentPage, so don't loadNext()")
       return false
     }
@@ -118,5 +128,9 @@ class MainViewModel @Inject constructor(
 
   fun setViewPagerSelectedIndex(pageIndex: Int) {
     _indicatorIndexLiveData.value = pageIndex
+  }
+
+  private companion object {
+    const val START_PAGE_NUMBER = 0
   }
 }
