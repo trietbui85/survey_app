@@ -21,8 +21,9 @@ class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): PagerVH =
-    PagerVH(LayoutInflater.from(parent.context).inflate(R.layout.item_survey, parent, false))
+  ): PagerVH = PagerVH(
+    LayoutInflater.from(parent.context).inflate(R.layout.item_survey, parent, false)
+  )
 
   override fun getItemCount(): Int = surveyItems.size
 
@@ -30,15 +31,17 @@ class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
     holder: PagerVH,
     position: Int
   ) = holder.itemView.run {
-    val surveyItem = surveyItems[position]
+    surveyItems[position].let {
+      nameTextView.text = it.title
+      descriptionTextView.text = it.description
 
-    nameTextView.text = surveyItem.title
-    descriptionTextView.text = surveyItem.description
-    if (surveyItem.coverHighResImageUrl.isNotEmpty()) {
-      coverImageView.load(surveyItem.coverHighResImageUrl)
-    }
-    takeSurveyButton.setOnClickListener {
-      callback.click(surveyItem)
+      if (it.coverHighResImageUrl.isNotEmpty()) {
+        coverImageView.load(it.coverHighResImageUrl)
+      }
+
+      takeSurveyButton.setOnClickListener { _ ->
+        callback.click(it)
+      }
     }
   }
 
