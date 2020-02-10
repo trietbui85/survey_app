@@ -56,8 +56,12 @@ android {
   }
 
   buildTypes {
-    release {
+    debug {
       minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+    release {
+      minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
@@ -94,11 +98,15 @@ android {
   }
 }
 
+configurations {
+  devDebugImplementation {}
+}
+
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation 'androidx.appcompat:appcompat:1.1.0'
-  implementation 'androidx.core:core-ktx:1.1.0'
+  implementation 'androidx.core:core-ktx:1.2.0'
   implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
   def lifecycle_version = "2.2.0"
@@ -117,11 +125,12 @@ dependencies {
   implementation "androidx.room:room-ktx:$room_version"
 
   implementation "androidx.viewpager2:viewpager2:1.0.0"
-  implementation("io.coil-kt:coil:0.9.3")
-  implementation 'me.relex:circleindicator:2.1.4'
+  implementation "io.coil-kt:coil:0.9.5"
+  implementation "me.relex:circleindicator:2.1.4"
   // navigation component
-  implementation "androidx.navigation:navigation-fragment-ktx:2.2.0"
-  implementation "androidx.navigation:navigation-ui-ktx:2.2.0"
+  def navigation_version = "2.2.1"
+  implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+  implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
   implementation "com.google.code.gson:gson:2.8.6"
   implementation "com.squareup.retrofit2:retrofit:2.7.1"
@@ -140,8 +149,8 @@ dependencies {
 
   implementation "com.jakewharton.timber:timber:4.7.1"
 
-  // debugImplementation because LeakCanary should only run in debug builds.
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+  // devDebugImplementation because LeakCanary should only run in Dev flavor & debug builds.
+  devDebugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
   // Note: DON'T upgrade JUnit to v4.13 - it will cause error "Unresolved reference: Test" in
   // test file although these test cases can still be run
