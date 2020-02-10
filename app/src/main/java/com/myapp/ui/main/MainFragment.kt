@@ -51,7 +51,7 @@ class MainFragment : DaggerFragment() {
       Timber.d("launchWhenCreated: last indicatorIndexLiveData=$indicatorIndex")
       if (indicatorIndex < 0) {
         // If no existing LiveData for content, let fetch data
-        viewModel.fetchSurveys(1)
+        viewModel.fetchSurveys()
       }
 
     }
@@ -129,7 +129,7 @@ class MainFragment : DaggerFragment() {
   private fun initViewAndAction() {
     refreshButton.setOnClickListener {
       surveyAdapter.clearItems()
-      viewModel.fetchSurveys(1, true)
+      viewModel.fetchSurveys(forceReload = true)
     }
     menuButton.setOnClickListener {
       // No action for Menu More, thus just show a Toast
