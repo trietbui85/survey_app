@@ -28,10 +28,6 @@ import javax.inject.Inject
 
 class MainFragment : DaggerFragment() {
 
-  companion object {
-    fun newInstance() = MainFragment()
-  }
-
   @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -99,22 +95,21 @@ class MainFragment : DaggerFragment() {
       indicator.setViewPager(viewPager)
     })
 
-    viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
-      Timber.d("viewModel.loadingLiveData: is loading: $it")
-      if (it.first) {
-        // If is loading
-        if (it.second) {
-          // is first time
-          loadMoreView.toInvisible()
-          fullscreenLoadingView.toVisible()
-        } else {
-          loadMoreView.toVisible()
-          fullscreenLoadingView.toInvisible()
-        }
+    viewModel.loadingFullscreenLiveData.observe(viewLifecycleOwner, Observer {
+      Timber.d("viewModel.loadingFullscreenLiveData: is loading: $it")
+      if (it) {
+        fullscreenLoadingView.toVisible()
       } else {
-        // stop loading
-        loadMoreView.toInvisible()
         fullscreenLoadingView.toInvisible()
+      }
+    })
+
+    viewModel.loadingMoreLiveData.observe(viewLifecycleOwner, Observer {
+      Timber.d("viewModel.loadingFullscreenLiveData: is loading: $it")
+      if (it) {
+        loadMoreView.toVisible()
+      } else {
+        loadMoreView.toInvisible()
       }
     })
 
