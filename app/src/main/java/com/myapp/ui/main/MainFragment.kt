@@ -105,7 +105,7 @@ class MainFragment : DaggerFragment() {
     })
 
     viewModel.loadingMoreLiveData.observe(viewLifecycleOwner, Observer {
-      Timber.d("viewModel.loadingFullscreenLiveData: is loading: $it")
+      Timber.d("viewModel.loadingMoreLiveData: is loading: $it")
       if (it) {
         loadMoreView.toVisible()
       } else {
@@ -117,8 +117,6 @@ class MainFragment : DaggerFragment() {
       it.getContentIfNotHandled()
         ?.let { dataException ->
           Timber.d("viewModel.errorLiveEvent: error: $it")
-          loadMoreView.toInvisible()
-          fullscreenLoadingView.toInvisible()
 
           val errorText = dataException.getErrorText(requireContext())
           this.showToastLong(errorText)
