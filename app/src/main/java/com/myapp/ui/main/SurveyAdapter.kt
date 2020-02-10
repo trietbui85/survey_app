@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.myapp.R
 import com.myapp.data.repo.SurveyItem
-import com.myapp.utils.getHighResImageUrl
 import kotlinx.android.synthetic.main.item_survey.view.coverImageView
 import kotlinx.android.synthetic.main.item_survey.view.descriptionTextView
 import kotlinx.android.synthetic.main.item_survey.view.nameTextView
@@ -34,8 +33,8 @@ class SurveyAdapter(private val callback: MainFragment.OpenDetailCallback) :
 
     nameTextView.text = surveyItem.title
     descriptionTextView.text = surveyItem.description
-    if (surveyItem.coverImageUrl.isNotEmpty()) {
-      coverImageView.load(surveyItem.getHighResImageUrl())
+    if (surveyItem.coverHighResImageUrl.isNotEmpty()) {
+      coverImageView.load(surveyItem.coverHighResImageUrl)
     }
     takeSurveyButton.setOnClickListener {
       callback.click(surveyItem)
