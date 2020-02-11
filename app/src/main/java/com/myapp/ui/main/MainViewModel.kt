@@ -11,16 +11,19 @@ import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
 import com.myapp.utils.CollectionUtils.merge2List
 import com.myapp.utils.LiveEvent
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
+@ExperimentalCoroutinesApi
 class MainViewModel @Inject constructor(
   private val surveyRepository: SurveyRepository,
-  @Named("NumOfItemPerPage") private val numOfItemPerPage: Int,
-  @Named("MainDispatcher") private val mainDispatcher: CoroutineDispatcher
+  @Named("NumOfItemPerPage") private val numOfItemPerPage: Int
 ) : ViewModel() {
 
   // Current page to load network data, is 0-based
@@ -64,45 +67,45 @@ class MainViewModel @Inject constructor(
       Timber.d("Before fetchSurveysForPage, set currentPage = $pageNumber")
       val showFullscreenLoading = currentPage == START_PAGE_NUMBER
 
-      viewModelScope.launch(mainDispatcher) {
-        // Only notify change of fullscreenLoading if showFullscreenLoading is true
-        if (showFullscreenLoading) {
-          _loadingFullscreenLiveData.value = true
-        } else {
-          _loadingMoreLiveData.value = true
-        }
-        val result: Result<List<SurveyItem>> =
-          surveyRepository.loadSurveys(currentPage, numOfItemPerPage)
-        if (result.status == Result.Status.SUCCESS) {
-          Timber.d(
+      // Only notify change of fullscreenLoading if showFullscreenLoading is true
+      surveyRepository.loadSurveys(currentPage, numOfItemPerPage)
+        .onStart {
+          if (showFullscreenLoading) {
+            _loadingFullscreenLiveData.value = true
+          } else {
+            _loadingMoreLiveData.value = true
+          }
+        }.onCompletion {
+          if (showFullscreenLoading) {
+            _loadingFullscreenLiveData.value = false
+          } else {
+            _loadingMoreLiveData.value = false
+          }
+        }.onEach { result ->
+          if (result.status == Result.Status.SUCCESS) {
+            Timber.d(
               "There are ${_contentLiveData.value?.size} existing items, " +
                   "and ${result.data?.size} new items"
-          )
+            )
 
-          if (result.data.isNullOrEmpty()) {
-            // If success but has empty list data, it means no more page to load
-            // Thus we must revert currentPage
-            currentPage--
-            endingPage = currentPage
-            Timber.d("This is the endingPage=$endingPage. No more items")
-          } else {
-            merge2List(_contentLiveData.value, result.data).let {
-              _contentLiveData.value = it
+            if (result.data.isNullOrEmpty()) {
+              // If success but has empty list data, it means no more page to load
+              // Thus we must revert currentPage
+              currentPage--
+              endingPage = currentPage
+              Timber.d("This is the endingPage=$endingPage. No more items")
+            } else {
+              merge2List(_contentLiveData.value, result.data).let {
+                _contentLiveData.value = it
+              }
             }
+
+          } else if (result.status == Result.Status.ERROR) {
+            _errorLiveEvent.value = LiveEvent(result.exception!!)
+            // error means fetching is not successful, thus we must revert currentPage
+            currentPage--
           }
-
-        } else if (result.status == Result.Status.ERROR) {
-          _errorLiveEvent.value = LiveEvent(result.exception!!)
-          // error means fetching is not successful, thus we must revert currentPage
-          currentPage--
-        }
-
-        if (showFullscreenLoading) {
-          _loadingFullscreenLiveData.value = false
-        } else {
-          _loadingMoreLiveData.value = false
-        }
-      }
+        }.launchIn(viewModelScope)
     }
 
     when {
