@@ -18,6 +18,12 @@ class TokenAuthenticator(
     response: Response
   ): Request? {
     Timber.d("Found 401 request - need to refresh its token")
+
+    if (getResponseCount(response) >= retryLimit) {
+      Timber.d("Failed $retryLimit times, giving up")
+      return null
+    }
+
     // We need to have a token in order to refresh it.
     val token = runBlocking {
       accountRepository.getTokenFromCache()
@@ -29,7 +35,8 @@ class TokenAuthenticator(
       }
 
       // Check if the request made was previously made as an authenticated request.
-      if (response.code == 401 || response.request.header("Authorization") != null) {
+      if (response.code == 401 || response.request.header(httpHeaderAuthorization) != null) {
+        response.priorResponse
 
         // If the token has changed since the request was made, use the new token.
         if (newToken != null && newToken != token) {
@@ -47,14 +54,30 @@ class TokenAuthenticator(
     return null
   }
 
+  private fun getResponseCount(response: Response): Int {
+    var result = 1
+    var priorResponse = response.priorResponse
+    while (priorResponse != null) {
+      result++
+      priorResponse = priorResponse.priorResponse
+    }
+    return result
+  }
+
   private fun newRequestWithAccessToken(
     request: Request,
     accessToken: AccessTokenItem
   ): Request {
     Timber.d("After have new token=$accessToken, continue request=$request")
     return request.newBuilder()
-        .removeHeader("Authorization")
-      .header("Authorization", accessToken.bearerToken)
-        .build()
+      .removeHeader(httpHeaderAuthorization)
+      .header(httpHeaderAuthorization, accessToken.bearerToken)
+      .build()
+  }
+
+  private companion object {
+    const val httpHeaderAuthorization = "Authorization"
+    // Only retry 3 times
+    const val retryLimit = 3
   }
 }
