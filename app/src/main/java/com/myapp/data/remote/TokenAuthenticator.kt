@@ -2,6 +2,9 @@ package com.myapp.data.remote
 
 import com.myapp.data.repo.AccessTokenItem
 import com.myapp.data.repo.AccountRepository
+import com.myapp.utils.addBearerToken
+import com.myapp.utils.getAuthorization
+import com.myapp.utils.isUnauthorized
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -35,7 +38,7 @@ class TokenAuthenticator(
       }
 
       // Check if the request made was previously made as an authenticated request.
-      if (response.code == 401 || response.request.header(httpHeaderAuthorization) != null) {
+      if (response.isUnauthorized() || response.request.getAuthorization() != null) {
         response.priorResponse
 
         // If the token has changed since the request was made, use the new token.
@@ -70,13 +73,11 @@ class TokenAuthenticator(
   ): Request {
     Timber.d("After have new token=$accessToken, continue request=$request")
     return request.newBuilder()
-      .removeHeader(httpHeaderAuthorization)
-      .header(httpHeaderAuthorization, accessToken.bearerToken)
+      .addBearerToken(accessToken.bearerToken)
       .build()
   }
 
   private companion object {
-    const val httpHeaderAuthorization = "Authorization"
     // Only retry 3 times
     const val retryLimit = 3
   }
