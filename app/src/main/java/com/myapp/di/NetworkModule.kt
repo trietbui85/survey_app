@@ -24,10 +24,11 @@ import javax.inject.Singleton
 class NetworkModule {
 
   companion object {
-    val DEFAULT_GSON = GsonBuilder().setFieldNamingPolicy(
+    val DEFAULT_GSON: Gson = GsonBuilder().setFieldNamingPolicy(
       FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES
     ).create()
   }
+
   @Singleton
   @Provides
   @Named("NumOfItemPerPage")
@@ -37,6 +38,21 @@ class NetworkModule {
   @Provides
   @Named("EndpointUrl")
   fun providerEndpointUrl(): String = BuildConfig.ENDPOINT_URL
+
+  @Singleton
+  @Provides
+  @Named("AccountGrantType")
+  fun providerAccountGrantType(): String = BuildConfig.ACCOUNT_GRANT_TYPE
+
+  @Singleton
+  @Provides
+  @Named("AccountDefaultUsername")
+  fun providerAccountDefaultUsername(): String = BuildConfig.ACCOUNT_DEFAULT_USERNAME
+
+  @Singleton
+  @Provides
+  @Named("AccountDefaultPassword")
+  fun providerAccountDefaultPassword(): String = BuildConfig.ACCOUNT_DEFAULT_PASSWORD
 
   @Singleton
   @Provides

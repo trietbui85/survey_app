@@ -34,69 +34,73 @@ import javax.inject.Singleton
 @Module(includes = [ApplicationModuleBinds::class, NetworkModule::class])
 class ApplicationModule {
 
-    @Singleton
-    @Provides
-    fun provideAccountAuthenticator(accountRepository: AccountRepository): TokenAuthenticator {
-        return TokenAuthenticator(accountRepository)
-    }
+  @Singleton
+  @Provides
+  fun provideAccountAuthenticator(accountRepository: AccountRepository): TokenAuthenticator {
+    return TokenAuthenticator(accountRepository)
+  }
 
-    @Singleton
-    @Provides
-    fun provideTokenLocalDataSource(
-        pref: SharedPreferences,
-        mapper: AccountItemMapper
-    ): TokenLocalDataSource {
-        return TokenLocalDataSourceImpl(pref, mapper)
-    }
+  @Singleton
+  @Provides
+  fun provideTokenLocalDataSource(
+    pref: SharedPreferences,
+    mapper: AccountItemMapper
+  ): TokenLocalDataSource {
+    return TokenLocalDataSourceImpl(pref, mapper)
+  }
 
-    @Singleton
-    @Provides
-    fun provideSurveyLocalDataSource(database: SurveyDatabase): SurveyLocalDataSource {
-        return SurveyLocalDataSourceImpl(database)
-    }
+  @Singleton
+  @Provides
+  fun provideSurveyLocalDataSource(database: SurveyDatabase): SurveyLocalDataSource {
+    return SurveyLocalDataSourceImpl(database)
+  }
 
-    @Singleton
-    @Provides
-    fun provideSurveyRemoteDataSource(surveyApiService: SurveyApiService): SurveyRemoteDataSource {
-        return SurveyRemoteDataSourceImpl(surveyApiService)
-    }
+  @Singleton
+  @Provides
+  fun provideSurveyRemoteDataSource(surveyApiService: SurveyApiService): SurveyRemoteDataSource {
+    return SurveyRemoteDataSourceImpl(surveyApiService)
+  }
 
-    @Singleton
-    @Provides
-    fun provideTokenRemoteDataSource(tokenApiService: TokenApiService): TokenRemoteDataSource {
-        return TokenRemoteDataSourceImpl(tokenApiService)
-    }
+  @Singleton
+  @Provides
+  fun provideTokenRemoteDataSource(
+    tokenApiService: TokenApiService,
+    @Named("AccountGrantType") grantType: String,
+    @Named("AccountDefaultUsername") username: String,
+    @Named("AccountDefaultPassword") password: String
+  ): TokenRemoteDataSource {
+    return TokenRemoteDataSourceImpl(tokenApiService, grantType, username, password)
+  }
 
-    @Singleton
-    @Provides
-    fun provideDatabase(context: Context): SurveyDatabase {
-        return Room.databaseBuilder(
-                context.applicationContext,
-                SurveyDatabase::class.java,
-                "${SurveyDatabase::class.java.simpleName}.db"
-        )
-                .build()
-    }
+  @Singleton
+  @Provides
+  fun provideDatabase(context: Context): SurveyDatabase {
+    return Room.databaseBuilder(
+      context.applicationContext,
+      SurveyDatabase::class.java,
+      "${SurveyDatabase::class.java.simpleName}.db"
+    ).build()
+  }
 
-    @Singleton
-    @Provides
-    fun provideSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences("surveys", Context.MODE_PRIVATE)
-    }
+  @Singleton
+  @Provides
+  fun provideSharedPreferences(context: Context): SharedPreferences {
+    return context.getSharedPreferences("surveys", Context.MODE_PRIVATE)
+  }
 
-    @Singleton
-    @Provides
-    fun provideAccountDataMapper(gson: Gson): AccountItemMapper = AccountItemMapper(gson)
+  @Singleton
+  @Provides
+  fun provideAccountDataMapper(gson: Gson): AccountItemMapper = AccountItemMapper(gson)
 
-    @Singleton
-    @Provides
-    @Named("MainDispatcher")
-    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+  @Singleton
+  @Provides
+  @Named("MainDispatcher")
+  fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
-    @Singleton
-    @Provides
-    @Named("IoDispatcher")
-    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+  @Singleton
+  @Provides
+  @Named("IoDispatcher")
+  fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
 }
 
@@ -104,11 +108,11 @@ class ApplicationModule {
 @Module
 abstract class ApplicationModuleBinds {
 
-    @Singleton
-    @Binds
-    abstract fun bindAccountRepository(repo: AccountRepositoryImpl): AccountRepository
+  @Singleton
+  @Binds
+  abstract fun bindAccountRepository(repo: AccountRepositoryImpl): AccountRepository
 
-    @Singleton
-    @Binds
-    abstract fun bindSurveyRepository(repo: SurveyRepositoryImpl): SurveyRepository
+  @Singleton
+  @Binds
+  abstract fun bindSurveyRepository(repo: SurveyRepositoryImpl): SurveyRepository
 }

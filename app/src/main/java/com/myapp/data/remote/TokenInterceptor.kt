@@ -1,6 +1,7 @@
 package com.myapp.data.remote
 
 import com.myapp.data.repo.AccountRepository
+import com.myapp.utils.addBearerToken
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -20,9 +21,9 @@ class TokenInterceptor(
     } else {
       Timber.d("Add token to request: ${chain.request()}")
       val authenticatedRequest = chain.request()
-          .newBuilder()
-        .addHeader("Authorization", tokenItem.bearerToken)
-          .build()
+        .newBuilder()
+        .addBearerToken(tokenItem.bearerToken)
+        .build()
       chain.proceed(authenticatedRequest)
     }
   }
