@@ -66,8 +66,13 @@ object TestData {
     SURVEY_COVER_IMAGE_URL, coverBackgroundColor = "#00FF00", type = "unknown type",
     shortUrl = "bit.ly", surveyVersion = 1
   )
+  val testSurveyResponse2 = SurveyResponse("survey id 2", "survey title 2")
+
   val testSurveyEntity =
     SurveyEntity(SURVEY_ID, SURVEY_TITLE, SURVEY_DESCRIPTION, SURVEY_COVER_IMAGE_URL)
+
   val testSurveyItem =
     SurveyItem(SURVEY_ID, SURVEY_TITLE, SURVEY_DESCRIPTION, SURVEY_COVER_IMAGE_URL)
+
+  val testSurveyItem2 = SurveyItem("survey id 2", "survey title 2")
 }

@@ -54,26 +54,3 @@ class SurveyRepositoryImpl @Inject constructor(
   }
 
 }
-/*
-    return try {
-      val response: Response<List<SurveyResponse>> =
-        surveyRemoteDataSource.getSurveys(pageNumber, itemPerPage)
-      if (response.isSuccessful) {
-        val items: List<SurveyItem> =
-          response.body()!!.map { mapper.fromSurveyResponse(it) }
-        Result.success(items)
-      } else {
-        val exception = response.parseDataException()
-          .also {
-            Timber.e("loadSurveys: data error: $it")
-          }
-        Result.error(exception)
-      }
-    } catch (e: Exception) {
-      val exception = e.parseConnectionException()
-        .also {
-          Timber.e("loadSurveys: connection error: $it")
-        }
-      Result.error(exception)
-    }
-*/
