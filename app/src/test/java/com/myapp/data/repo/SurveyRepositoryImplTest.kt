@@ -14,6 +14,8 @@ import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
@@ -33,25 +35,6 @@ class SurveyRepositoryImplTest : CoroutinesTest() {
     surveyRepository = SurveyRepositoryImpl(remoteDataSource, mapper, dispatcher)
   }
 
-  /*@Test
-  fun getTokenFromCache_HappyCase() {
-    runBlocking {
-      val listSurveys = listOf(SurveyResponse(id = "id 1"), SurveyResponse(id = "id 2"))
-      whenever(remoteDataSource.getSurveys(any(), any())) doReturn Response.success(
-          200,
-          listSurveys
-      )
-
-      val response = surveyRepository.loadSurveys(1, 2)
-
-      verify(remoteDataSource).getSurveys(1, 2)
-      assertThat(response).isNotNull()
-      assertThat(response.status).isEqualTo(Result.Status.SUCCESS)
-//            assertThat(response.data).containsExactlyElementsIn(listSurveys)
-//            verify(mapper).fromAccessTokenEntity(tokenEntity)
-    }
-  }*/
-
   @Test
   fun loadSurveys_RemoteDataSuccess_ThenEmitNetworkData() = runCoroutineTest {
     val listResponses = listOf(testSurveyResponse, testSurveyResponse2)
@@ -67,6 +50,26 @@ class SurveyRepositoryImplTest : CoroutinesTest() {
     flow.collect {
       assertThat(it.status).isEqualTo(Result.Status.SUCCESS)
       assertThat(it.data).isEqualTo(listOf(testSurveyItem, testSurveyItem2))
+      assertThat(it.exception).isNull()
+    }
+  }
+
+  @Test
+  fun loadSurveys_RemoteError400_ThenEmitException() = runCoroutineTest {
+    // Thanks https://stackoverflow.com/a/33156790/190309 for sample code to
+    // create Response.error()
+    whenever(remoteDataSource.getSurveys(any(), any())) doReturn Response.error(
+      400,
+      "Bad request"
+        .toResponseBody("application/json".toMediaTypeOrNull())
+    )
+
+    val flow = surveyRepository.loadSurveys(1, 2)
+
+    flow.collect {
+      assertThat(it.status).isEqualTo(Result.Status.ERROR)
+      assertThat(it.data).isNull()
+      assertThat(it.exception).isEqualTo(DataException(400, "Bad request"))
     }
   }
 }
