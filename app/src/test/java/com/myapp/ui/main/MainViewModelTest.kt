@@ -33,6 +33,11 @@ class MainViewModelTest : CoroutinesTest() {
   private val resultSuccess = com.myapp.data.repo.Result.success(surveys)
   private val resultError = com.myapp.data.repo.Result.error<List<SurveyItem>>(dataException)
 
+  private val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
+  private val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
+  private val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
+  private val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
+
   @Before
   fun setUp() {
     MockKAnnotations.init(this)
@@ -46,13 +51,8 @@ class MainViewModelTest : CoroutinesTest() {
       surveyRepository.loadSurveys(pageNumber, any())
     } returns flowOf(resultSuccess)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
 
     // TODO(triet) Must write test for _indicatorIndexLiveData too
@@ -81,16 +81,9 @@ class MainViewModelTest : CoroutinesTest() {
       surveyRepository.loadSurveys(pageNumber, any())
     } returns flowOf(resultError)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
-
-    val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
     viewModel.errorLiveEvent.observeForever(errorObserver)
 
     viewModel.fetchSurveys(pageNumber)
@@ -115,13 +108,8 @@ class MainViewModelTest : CoroutinesTest() {
       surveyRepository.loadSurveys(pageNumber, any())
     } returns flowOf(resultSuccess)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
 
     viewModel.fetchSurveys(pageNumber)
@@ -145,13 +133,8 @@ class MainViewModelTest : CoroutinesTest() {
       surveyRepository.loadSurveys(pageNumber, any())
     } returns flowOf(resultError)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
     viewModel.errorLiveEvent.observeForever(errorObserver)
 
     viewModel.fetchSurveys(pageNumber)
