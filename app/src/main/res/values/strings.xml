@@ -8,7 +8,6 @@
   <string name="load_next_page">Load next page</string>
   <string name="no_surveys">No survey found! Please try again.</string>
   <string name="fetching_surveys">Fetching surveys…</string>
-  <string name="survey_details_invalid">Invalid survey data</string>
   <string name="menu_more">Open More menu</string>
 
   <!-- Error message for network or connection-->
