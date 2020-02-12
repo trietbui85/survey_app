@@ -73,7 +73,7 @@ class MainViewModel @Inject constructor(
         }
         val result: Result<List<SurveyItem>> =
           surveyRepository.loadSurveys(currentPage, numOfItemPerPage)
-        if (result.status == Result.Status.SUCCESS) {
+        if (result.isSuccess()) {
           Timber.d(
               "There are ${_contentLiveData.value?.size} existing items, " +
                   "and ${result.data?.size} new items"
@@ -91,7 +91,7 @@ class MainViewModel @Inject constructor(
             }
           }
 
-        } else if (result.status == Result.Status.ERROR) {
+        } else if (result.isError()) {
           _errorLiveEvent.value = LiveEvent(result.exception!!)
           // error means fetching is not successful, thus we must revert currentPage
           currentPage--
