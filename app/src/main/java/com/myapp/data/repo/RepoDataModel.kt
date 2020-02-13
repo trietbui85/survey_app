@@ -1,6 +1,7 @@
 package com.myapp.data.repo
 
 import android.os.Parcelable
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -11,6 +12,7 @@ data class SurveyItem(
   val coverImageUrl: String = ""
 ) : Parcelable {
   // Get the high resolution version of cover image url
+  @IgnoredOnParcel
   val coverHighResImageUrl = if (coverImageUrl.isEmpty()) "" else coverImageUrl + "l"
 }
 
