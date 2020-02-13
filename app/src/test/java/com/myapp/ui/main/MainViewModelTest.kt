@@ -1,62 +1,58 @@
 package com.myapp.ui.main
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth.assertThat
 import com.myapp.data.repo.DataException
 import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
+import com.myapp.utils.CoroutinesTest
 import com.myapp.utils.LiveEvent
+import com.myapp.utils.TestData.testSurveyItem
+import com.myapp.utils.TestData.testSurveyItem2
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifySequence
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
-class MainViewModelTest {
-
-  // Run tasks synchronously
-  @get:Rule
-  var instantTaskExecutorRule = InstantTaskExecutorRule()
+class MainViewModelTest : CoroutinesTest() {
 
   private val surveyRepository: SurveyRepository = mockk(relaxed = true)
 
   private lateinit var viewModel: MainViewModel
 
-  private val dispatcher = Dispatchers.Unconfined
-
-  private val surveys = mutableListOf(SurveyItem("id 1"), SurveyItem("id 2"))
+  private val surveys = mutableListOf(testSurveyItem, testSurveyItem2)
   private val dataException = DataException(404, "Page not found")
   private val resultSuccess = com.myapp.data.repo.Result.success(surveys)
   private val resultError = com.myapp.data.repo.Result.error<List<SurveyItem>>(dataException)
 
+  private val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
+  private val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
+  private val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
+  private val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
+
   @Before
   fun setUp() {
     MockKAnnotations.init(this)
-    viewModel = MainViewModel(surveyRepository, 5, dispatcher)
+    viewModel = MainViewModel(surveyRepository, 5)
   }
 
   @Test
-  fun fetchSurveys_FirstPageAndSuccess_ThenWithTheseResults() = runBlocking {
+  fun fetchSurveys_FirstPageAndSuccess_ThenWithSuccessResults() = runCoroutineTest {
     val pageNumber = 0
-    coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultSuccess
+    every {
+      surveyRepository.loadSurveys(pageNumber, any())
+    } returns flowOf(resultSuccess)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
 
     // TODO(triet) Must write test for _indicatorIndexLiveData too
@@ -79,20 +75,15 @@ class MainViewModelTest {
   }
 
   @Test
-  fun fetchSurveys_FirstPageAndFailed_ThenWithTheseResults() = runBlocking {
+  fun fetchSurveys_FirstPageAndFailed_ThenWithExceptionResults() = runCoroutineTest {
     val pageNumber = 0
-    coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultError
+    every {
+      surveyRepository.loadSurveys(pageNumber, any())
+    } returns flowOf(resultError)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
-
-    val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
     viewModel.errorLiveEvent.observeForever(errorObserver)
 
     viewModel.fetchSurveys(pageNumber)
@@ -111,17 +102,14 @@ class MainViewModelTest {
   }
 
   @Test
-  fun fetchSurveys_SecondPageAndSuccess_ThenWithTheseResults() = runBlocking {
+  fun fetchSurveys_SecondPageAndSuccess_ThenWithTheseResults() = runCoroutineTest {
     val pageNumber = 1
-    coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultSuccess
+    every {
+      surveyRepository.loadSurveys(pageNumber, any())
+    } returns flowOf(resultSuccess)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val contentObserver = mockk<Observer<MutableList<SurveyItem>>>(relaxed = true)
     viewModel.contentLiveData.observeForever(contentObserver)
 
     viewModel.fetchSurveys(pageNumber)
@@ -139,17 +127,14 @@ class MainViewModelTest {
   }
 
   @Test
-  fun fetchSurveys_SecondPageAndFailed_ThenWithTheseResults() = runBlocking {
+  fun fetchSurveys_SecondPageAndFailed_ThenWithTheseResults() = runCoroutineTest {
     val pageNumber = 1
-    coEvery { surveyRepository.loadSurveys(pageNumber, any()) } returns resultError
+    every {
+      surveyRepository.loadSurveys(pageNumber, any())
+    } returns flowOf(resultError)
 
-    val loadingFullscreenObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingFullscreenLiveData.observeForever(loadingFullscreenObserver)
-
-    val loadingMoreObserver = mockk<Observer<Boolean>>(relaxed = true)
     viewModel.loadingMoreLiveData.observeForever(loadingMoreObserver)
-
-    val errorObserver = mockk<Observer<LiveEvent<DataException>>>(relaxed = true)
     viewModel.errorLiveEvent.observeForever(errorObserver)
 
     viewModel.fetchSurveys(pageNumber)

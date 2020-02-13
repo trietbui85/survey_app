@@ -1,10 +1,12 @@
 package com.myapp.data.repo
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.local.db.SurveyEntity
 import com.myapp.data.remote.model.AccessTokenResponse
 import com.myapp.data.remote.model.SurveyResponse
+import timber.log.Timber
 import javax.inject.Inject
 
 class SurveyItemMapper @Inject constructor() {
@@ -64,8 +66,8 @@ class AccountItemMapper @Inject constructor(private val gson: Gson) {
     }
     return try {
       gson.fromJson(jsonToken, AccessTokenEntity::class.java)
-    } catch (e: Exception) {
-      // Log.e("RepoDataMapper", "fromStringToAccessTokenEntity failed: $e")
+    } catch (e: JsonSyntaxException) {
+      Timber.e("fromStringToAccessTokenEntity failed: $e, json=$jsonToken")
       null
     }
   }
