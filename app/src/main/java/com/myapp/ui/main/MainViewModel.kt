@@ -11,7 +11,6 @@ import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
 import com.myapp.utils.CollectionUtils.merge2List
 import com.myapp.utils.LiveEvent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -20,7 +19,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
-@ExperimentalCoroutinesApi
 class MainViewModel @Inject constructor(
   private val surveyRepository: SurveyRepository,
   @Named("NumOfItemPerPage") private val numOfItemPerPage: Int

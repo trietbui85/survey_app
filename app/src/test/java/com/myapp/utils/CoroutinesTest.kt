@@ -1,10 +1,8 @@
 package com.myapp.utils
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 
-@ExperimentalCoroutinesApi
 abstract class CoroutinesTest {
 
   @Rule
@@ -14,7 +12,6 @@ abstract class CoroutinesTest {
   @get:Rule
   var mainCoroutineRule = MainCoroutineRule()
 
-  @ExperimentalCoroutinesApi
   fun runCoroutineTest(block: suspend () -> Unit) {
     mainCoroutineRule.runBlocking {
       block()

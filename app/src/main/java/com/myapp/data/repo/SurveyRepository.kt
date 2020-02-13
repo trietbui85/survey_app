@@ -3,7 +3,6 @@ package com.myapp.data.repo
 import com.myapp.data.remote.SurveyRemoteDataSource
 import com.myapp.data.remote.model.SurveyResponse
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -20,7 +19,6 @@ interface SurveyRepository {
   ): Flow<Result<List<SurveyItem>>>
 }
 
-@ExperimentalCoroutinesApi
 class SurveyRepositoryImpl @Inject constructor(
   private val surveyRemoteDataSource: SurveyRemoteDataSource,
   private val mapper: SurveyItemMapper,

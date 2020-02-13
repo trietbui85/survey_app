@@ -6,13 +6,11 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Singleton
 
 /**
  * Main component for the application.
  */
-@ExperimentalCoroutinesApi
 @Singleton
 @Component(
     modules = [

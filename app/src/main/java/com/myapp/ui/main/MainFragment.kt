@@ -23,11 +23,9 @@ import kotlinx.android.synthetic.main.main_fragment.loadMoreView
 import kotlinx.android.synthetic.main.main_fragment.menuButton
 import kotlinx.android.synthetic.main.main_fragment.refreshButton
 import kotlinx.android.synthetic.main.main_fragment.viewPager
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 class MainFragment : DaggerFragment() {
 
   @Inject

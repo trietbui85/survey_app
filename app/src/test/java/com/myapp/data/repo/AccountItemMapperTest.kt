@@ -9,11 +9,9 @@ import com.myapp.utils.TestData.testJsonTokenEmpty
 import com.myapp.utils.TestData.testTokenEntity
 import com.myapp.utils.TestData.testTokenItem
 import com.myapp.utils.TestData.testTokenResponse
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Test
 
-@ExperimentalCoroutinesApi
 class AccountItemMapperTest {
 
   private lateinit var mapper: AccountItemMapper

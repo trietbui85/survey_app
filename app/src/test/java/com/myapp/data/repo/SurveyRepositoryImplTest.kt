@@ -12,7 +12,6 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -20,7 +19,6 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
 
-@ExperimentalCoroutinesApi
 class SurveyRepositoryImplTest : CoroutinesTest() {
 
   private val remoteDataSource: SurveyRemoteDataSource = mock()

@@ -22,11 +22,9 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Named
 import javax.inject.Singleton
 
-@ExperimentalCoroutinesApi
 @Module(includes = [ApplicationModuleBinds::class, NetworkModule::class])
 class ApplicationModule {
 
@@ -84,7 +82,6 @@ class ApplicationModule {
 
 }
 
-@ExperimentalCoroutinesApi
 @Module
 abstract class ApplicationModuleBinds {
 
