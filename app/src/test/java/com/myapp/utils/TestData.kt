@@ -1,16 +1,12 @@
 package com.myapp.utils
 
 import com.myapp.data.local.db.AccessTokenEntity
-import com.myapp.data.local.db.SurveyEntity
 import com.myapp.data.remote.model.AccessTokenResponse
 import com.myapp.data.remote.model.SurveyResponse
 import com.myapp.data.repo.AccessTokenItem
 import com.myapp.data.repo.SurveyItem
 
 object TestData {
-  private fun createSurveyEntity(index: Int) = SurveyEntity(
-    "id $index", "title $index", "description $index", "image $index"
-  )
 
   private fun buildJsonData(
     token: String,
@@ -22,12 +18,6 @@ object TestData {
             {"access_token":"$token","token_type":"$tokenType","expires_in":$expiresIn,"created_at":$createdAt}
         """.trimIndent()
   }
-
-  val testSurveyEntities = listOf(
-    createSurveyEntity(1),
-    createSurveyEntity(2),
-    createSurveyEntity(3)
-  )
 
   private const val TOKEN_VALUE = "token_data"
   private const val TOKEN_TYPE = "token_type"
@@ -67,9 +57,6 @@ object TestData {
     shortUrl = "bit.ly", surveyVersion = 1
   )
   val testSurveyResponse2 = SurveyResponse("survey id 2", "survey title 2")
-
-  val testSurveyEntity =
-    SurveyEntity(SURVEY_ID, SURVEY_TITLE, SURVEY_DESCRIPTION, SURVEY_COVER_IMAGE_URL)
 
   val testSurveyItem =
     SurveyItem(SURVEY_ID, SURVEY_TITLE, SURVEY_DESCRIPTION, SURVEY_COVER_IMAGE_URL)

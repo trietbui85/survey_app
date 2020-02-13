@@ -6,12 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myapp.data.repo.DataException
-import com.myapp.data.repo.Result
 import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
 import com.myapp.utils.CollectionUtils.merge2List
 import com.myapp.utils.LiveEvent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -20,7 +18,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
 
-@ExperimentalCoroutinesApi
 class MainViewModel @Inject constructor(
   private val surveyRepository: SurveyRepository,
   @Named("NumOfItemPerPage") private val numOfItemPerPage: Int
@@ -56,6 +53,17 @@ class MainViewModel @Inject constructor(
   @VisibleForTesting
   fun getCurrentPage() = currentPage
 
+  // After the Fragment is recreated, it will refetch the surveys
+  // Thus we need to check if surveys is already existed, then no need to refetch. Otherwise
+  // will start fetching
+  fun fetchSurveysIfPossible() {
+    val indicatorIndex = indicatorIndexLiveData.value ?: -1
+    // Only in the first time we have no page yet, thus need to refetch
+    if (indicatorIndex < 0) {
+      fetchSurveys()
+    }
+  }
+
   fun fetchSurveys(
     pageNumber: Int = START_PAGE_NUMBER,
     forceReload: Boolean = false
@@ -82,11 +90,8 @@ class MainViewModel @Inject constructor(
             _loadingMoreLiveData.value = false
           }
         }.onEach { result ->
-          if (result.status == Result.Status.SUCCESS) {
-            Timber.d(
-              "There are ${_contentLiveData.value?.size} existing items, " +
-                  "and ${result.data?.size} new items"
-            )
+          if (result.isSuccess()) {
+            Timber.d("There are ${_contentLiveData.value?.size} existing items, and ${result.data?.size} new items")
 
             if (result.data.isNullOrEmpty()) {
               // If success but has empty list data, it means no more page to load
@@ -100,7 +105,7 @@ class MainViewModel @Inject constructor(
               }
             }
 
-          } else if (result.status == Result.Status.ERROR) {
+          } else if (result.isError()) {
             _errorLiveEvent.value = LiveEvent(result.exception!!)
             // error means fetching is not successful, thus we must revert currentPage
             currentPage--
@@ -148,7 +153,17 @@ class MainViewModel @Inject constructor(
     _indicatorIndexLiveData.value = pageIndex
   }
 
+  fun onScrollToPage(pageIndex: Int, total: Int) {
+    _indicatorIndexLiveData.value = pageIndex
+    if (pageIndex == total - VISIBLE_THRESHOLD) {
+      loadNextPage()
+    }
+  }
+
   private companion object {
     const val START_PAGE_NUMBER = 0
+    // The minimum number of items to have below your current scroll position
+    // before loading more
+    const val VISIBLE_THRESHOLD = 1
   }
 }

@@ -39,21 +39,13 @@ class MainFragment : DaggerFragment() {
     override fun onPageSelected(position: Int) {
       super.onPageSelected(position)
       Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
-      viewModel.setViewPagerSelectedIndex(position)
-      if (position == surveyAdapter.itemCount - 1) {
-        viewModel.loadNextPage()
-      }
+      viewModel.onScrollToPage(position, surveyAdapter.itemCount)
     }
   }
+
   init {
     lifecycleScope.launchWhenCreated {
-      val indicatorIndex = viewModel.indicatorIndexLiveData.value ?: -1
-      Timber.d("launchWhenCreated: last indicatorIndexLiveData=$indicatorIndex")
-      if (indicatorIndex < 0) {
-        // If no existing LiveData for content, let fetch data
-        viewModel.fetchSurveys()
-      }
-
+      viewModel.fetchSurveysIfPossible()
     }
   }
 

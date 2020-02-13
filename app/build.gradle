@@ -30,6 +30,18 @@ android {
     }
   }
 
+  kotlinOptions {
+    jvmTarget = "1.8"
+    // https://github.com/Kotlin/kotlinx.coroutines/issues/976#issuecomment-514131536
+    // To fix warning: This declaration is experimental and its usage should be marked with
+    // '@kotlinx.coroutines.ExperimentalCoroutinesApi
+    // TODO(triet) When bump Kotlin version, need to double check this warning again
+    freeCompilerArgs += [
+        "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        // "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"
+    ]
+  }
+
   lintOptions {
     // If set to true, turns off analysis progress reporting by lint.
     // quiet true

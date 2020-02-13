@@ -12,7 +12,6 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -20,7 +19,6 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
 
-@ExperimentalCoroutinesApi
 class SurveyRepositoryImplTest : CoroutinesTest() {
 
   private val remoteDataSource: SurveyRemoteDataSource = mock()
@@ -48,7 +46,7 @@ class SurveyRepositoryImplTest : CoroutinesTest() {
     val flow = surveyRepository.loadSurveys(1, 2)
 
     flow.collect {
-      assertThat(it.status).isEqualTo(Result.Status.SUCCESS)
+      assertThat(it.isSuccess()).isTrue()
       assertThat(it.data).isEqualTo(listOf(testSurveyItem, testSurveyItem2))
       assertThat(it.exception).isNull()
     }
@@ -67,7 +65,7 @@ class SurveyRepositoryImplTest : CoroutinesTest() {
     val flow = surveyRepository.loadSurveys(1, 2)
 
     flow.collect {
-      assertThat(it.status).isEqualTo(Result.Status.ERROR)
+      assertThat(it.isError()).isTrue()
       assertThat(it.data).isNull()
       assertThat(it.exception).isEqualTo(DataException(400, "Bad request"))
     }

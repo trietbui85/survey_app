@@ -11,7 +11,6 @@ import com.myapp.data.remote.TokenInterceptor
 import com.myapp.data.repo.AccountRepository
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-@ExperimentalCoroutinesApi
 @Module
 class NetworkModule {
 
