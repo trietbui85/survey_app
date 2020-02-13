@@ -149,10 +149,6 @@ class MainViewModel @Inject constructor(
     return true
   }
 
-  fun setViewPagerSelectedIndex(pageIndex: Int) {
-    _indicatorIndexLiveData.value = pageIndex
-  }
-
   fun onScrollToPage(pageIndex: Int, total: Int) {
     _indicatorIndexLiveData.value = pageIndex
     if (pageIndex == total - VISIBLE_THRESHOLD) {
