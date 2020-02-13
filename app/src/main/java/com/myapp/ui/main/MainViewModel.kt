@@ -56,6 +56,17 @@ class MainViewModel @Inject constructor(
   @VisibleForTesting
   fun getCurrentPage() = currentPage
 
+  // After the Fragment is recreated, it will refetch the surveys
+  // Thus we need to check if surveys is already existed, then no need to refetch. Otherwise
+  // will start fetching
+  fun fetchSurveysIfPossible() {
+    val indicatorIndex = indicatorIndexLiveData.value ?: -1
+    // Only in the first time we have no page yet, thus need to refetch
+    if (indicatorIndex < 0) {
+      fetchSurveys()
+    }
+  }
+
   fun fetchSurveys(
     pageNumber: Int = START_PAGE_NUMBER,
     forceReload: Boolean = false
@@ -83,10 +94,7 @@ class MainViewModel @Inject constructor(
           }
         }.onEach { result ->
           if (result.status == Result.Status.SUCCESS) {
-            Timber.d(
-              "There are ${_contentLiveData.value?.size} existing items, " +
-                  "and ${result.data?.size} new items"
-            )
+            Timber.d("There are ${_contentLiveData.value?.size} existing items, and ${result.data?.size} new items")
 
             if (result.data.isNullOrEmpty()) {
               // If success but has empty list data, it means no more page to load

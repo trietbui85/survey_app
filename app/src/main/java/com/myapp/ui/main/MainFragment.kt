@@ -23,9 +23,11 @@ import kotlinx.android.synthetic.main.main_fragment.loadMoreView
 import kotlinx.android.synthetic.main.main_fragment.menuButton
 import kotlinx.android.synthetic.main.main_fragment.refreshButton
 import kotlinx.android.synthetic.main.main_fragment.viewPager
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class MainFragment : DaggerFragment() {
 
   @Inject
@@ -45,15 +47,10 @@ class MainFragment : DaggerFragment() {
       }
     }
   }
+
   init {
     lifecycleScope.launchWhenCreated {
-      val indicatorIndex = viewModel.indicatorIndexLiveData.value ?: -1
-      Timber.d("launchWhenCreated: last indicatorIndexLiveData=$indicatorIndex")
-      if (indicatorIndex < 0) {
-        // If no existing LiveData for content, let fetch data
-        viewModel.fetchSurveys()
-      }
-
+      viewModel.fetchSurveysIfPossible()
     }
   }
 
