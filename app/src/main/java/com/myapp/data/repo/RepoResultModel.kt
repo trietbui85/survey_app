@@ -1,5 +1,8 @@
 package com.myapp.data.repo
 
+import com.myapp.data.repo.Result.Status.ERROR
+import com.myapp.data.repo.Result.Status.SUCCESS
+
 /**
  * A generic class that holds a value with its loading status.
  *
@@ -15,23 +18,22 @@ data class Result<out T>(
 
     enum class Status {
         SUCCESS,
-        ERROR,
-        LOADING
+        ERROR
     }
 
     companion object {
         fun <T> success(data: T): Result<T> {
-            return Result(Status.SUCCESS, data, null)
+            return Result(SUCCESS, data, null)
         }
 
         fun <T> error(exception: DataException): Result<T> {
-            return Result(Status.ERROR, null, exception)
-        }
-
-        fun <T> loading(data: T? = null): Result<T> {
-            return Result(Status.LOADING, data, null)
+            return Result(ERROR, null, exception)
         }
     }
+
+    fun isSuccess() = status == SUCCESS
+
+    fun isError() = status == ERROR
 }
 
 // This class is used to handle exception when parse data from network
