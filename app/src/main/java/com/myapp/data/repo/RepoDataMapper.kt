@@ -15,7 +15,7 @@ class SurveyItemMapper @Inject constructor() {
   )
 }
 
-class AccountItemMapper() {
+class AccountItemMapper {
   fun fromAccessTokenResponse(response: AccessTokenResponse) = AccessTokenItem(response.accessToken)
 
   fun fromAccessTokenEntity(entity: AccessTokenEntity) = AccessTokenItem(entity.accessToken)
