@@ -3,7 +3,6 @@ package com.myapp.data.repo
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.myapp.data.local.db.AccessTokenEntity
-import com.myapp.data.local.db.SurveyEntity
 import com.myapp.data.remote.model.AccessTokenResponse
 import com.myapp.data.remote.model.SurveyResponse
 import timber.log.Timber
@@ -16,20 +15,6 @@ class SurveyItemMapper @Inject constructor() {
       title = response.title,
       description = response.description,
       coverImageUrl = response.coverImageUrl
-  )
-
-  fun fromSurveyEntity(entity: SurveyEntity) = SurveyItem(
-      id = entity.id,
-      title = entity.title,
-      description = entity.description,
-      coverImageUrl = entity.coverImageUrl
-  )
-
-  fun toSurveyEntity(item: SurveyItem) = SurveyEntity(
-      id = item.id,
-      title = item.title,
-      description = item.description,
-      coverImageUrl = item.coverImageUrl
   )
 }
 

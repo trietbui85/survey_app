@@ -2,13 +2,9 @@ package com.myapp.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.room.Room
 import com.google.gson.Gson
-import com.myapp.data.local.SurveyLocalDataSource
-import com.myapp.data.local.SurveyLocalDataSourceImpl
 import com.myapp.data.local.TokenLocalDataSource
 import com.myapp.data.local.TokenLocalDataSourceImpl
-import com.myapp.data.local.db.SurveyDatabase
 import com.myapp.data.remote.SurveyApiService
 import com.myapp.data.remote.SurveyRemoteDataSource
 import com.myapp.data.remote.SurveyRemoteDataSourceImpl
@@ -51,12 +47,6 @@ class ApplicationModule {
 
   @Singleton
   @Provides
-  fun provideSurveyLocalDataSource(database: SurveyDatabase): SurveyLocalDataSource {
-    return SurveyLocalDataSourceImpl(database)
-  }
-
-  @Singleton
-  @Provides
   fun provideSurveyRemoteDataSource(surveyApiService: SurveyApiService): SurveyRemoteDataSource {
     return SurveyRemoteDataSourceImpl(surveyApiService)
   }
@@ -70,16 +60,6 @@ class ApplicationModule {
     @Named("AccountDefaultPassword") password: String
   ): TokenRemoteDataSource {
     return TokenRemoteDataSourceImpl(tokenApiService, grantType, username, password)
-  }
-
-  @Singleton
-  @Provides
-  fun provideDatabase(context: Context): SurveyDatabase {
-    return Room.databaseBuilder(
-      context.applicationContext,
-      SurveyDatabase::class.java,
-      "${SurveyDatabase::class.java.simpleName}.db"
-    ).build()
   }
 
   @Singleton
