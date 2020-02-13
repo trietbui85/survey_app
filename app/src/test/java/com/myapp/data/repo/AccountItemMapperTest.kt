@@ -3,25 +3,14 @@ package com.myapp.data.repo
 import com.google.common.truth.Truth.assertThat
 import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.remote.model.AccessTokenResponse
-import com.myapp.di.NetworkModule.Companion.DEFAULT_GSON
-import com.myapp.utils.TestData.testJsonToken
-import com.myapp.utils.TestData.testJsonTokenEmpty
 import com.myapp.utils.TestData.testTokenEntity
 import com.myapp.utils.TestData.testTokenItem
 import com.myapp.utils.TestData.testTokenResponse
-import org.junit.Before
 import org.junit.Test
 
 class AccountItemMapperTest {
 
-  private lateinit var mapper: AccountItemMapper
-
-  @Before
-  fun setUp() {
-    mapper = AccountItemMapper(
-      gson = DEFAULT_GSON
-    )
-  }
+  private val mapper = AccountItemMapper()
 
   @Test
   fun fromAccessTokenResponseToItem_EmptyResponse_Success() {
@@ -69,13 +58,13 @@ class AccountItemMapperTest {
   @Test
   fun fromAccessTokenEntityToString_EmptyEntity_ReturnJsonWithEmptyData() {
     val strToken = mapper.fromAccessTokenEntityToString(AccessTokenEntity())
-    assertThat(strToken).isEqualTo(testJsonTokenEmpty)
+    assertThat(strToken).isEqualTo("")
   }
 
   @Test
-  fun fromAccessTokenEntityToString_ValidEntity_ReturnJsonData() {
+  fun fromAccessTokenEntityToString_ValidEntity_ReturnTokenString() {
     val strToken = mapper.fromAccessTokenEntityToString(testTokenEntity)
-    assertThat(strToken).isEqualTo(testJsonToken)
+    assertThat(strToken).isEqualTo(testTokenEntity.accessToken)
   }
 
   @Test
@@ -91,25 +80,10 @@ class AccountItemMapperTest {
   }
 
   @Test
-  fun fromStringToAccessTokenEntity_InvalidJsonText_ReturnNull() {
+  fun fromStringToAccessTokenEntity_ValidString_ReturnReturnEntity() {
     val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity("123")
-    assertThat(entity).isNull()
-
-    val entity2: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity("{x}")
-    assertThat(entity2).isNull()
-  }
-
-  @Test
-  fun fromStringToAccessTokenEntity_JsonWithEmptyData_ReturnEmptyEntity() {
-    val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity(testJsonTokenEmpty)
     assertThat(entity).isNotNull()
-    assertThat(entity).isEqualTo(AccessTokenEntity())
+    assertThat(entity!!.accessToken).isEqualTo("123")
   }
 
-  @Test
-  fun fromStringToAccessTokenEntity_ValidJsonData_ReturnEntity() {
-    val entity: AccessTokenEntity? = mapper.fromStringToAccessTokenEntity(testJsonToken)
-    assertThat(entity).isNotNull()
-    assertThat(entity).isEqualTo(testTokenEntity)
-  }
 }
