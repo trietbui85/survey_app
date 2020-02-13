@@ -132,7 +132,7 @@ class MainViewModel @Inject constructor(
 
   // Loading next page. Return TRUE if can continue loading, otherwise FALSE if loading is
   // in progress already and we must wait for
-  fun loadNextPage(): Boolean {
+  private fun loadNextPage(): Boolean {
     if (_loadingFullscreenLiveData.value == true || _loadingMoreLiveData.value == true) {
       Timber.d("Is still fetching data for page $currentPage, so don't loadNext()")
       return false
