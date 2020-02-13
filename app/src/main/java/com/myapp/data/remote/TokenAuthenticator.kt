@@ -22,8 +22,8 @@ class TokenAuthenticator(
   ): Request? {
     Timber.d("Found 401 request - need to refresh its token")
 
-    if (getResponseCount(response) >= retryLimit) {
-      Timber.d("Failed $retryLimit times, giving up")
+    if (getResponseCount(response) >= RETRY_LIMIT_COUNT) {
+      Timber.d("Failed $RETRY_LIMIT_COUNT times, giving up")
       return null
     }
 
@@ -79,6 +79,6 @@ class TokenAuthenticator(
 
   private companion object {
     // Only retry 3 times
-    const val retryLimit = 3
+    const val RETRY_LIMIT_COUNT = 3
   }
 }
