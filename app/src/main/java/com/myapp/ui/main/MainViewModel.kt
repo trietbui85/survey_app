@@ -156,7 +156,17 @@ class MainViewModel @Inject constructor(
     _indicatorIndexLiveData.value = pageIndex
   }
 
+  fun onScrollToPage(pageIndex: Int, total: Int) {
+    _indicatorIndexLiveData.value = pageIndex
+    if (pageIndex == total - VISIBLE_THRESHOLD) {
+      loadNextPage()
+    }
+  }
+
   private companion object {
     const val START_PAGE_NUMBER = 0
+    // The minimum number of items to have below your current scroll position
+    // before loading more
+    const val VISIBLE_THRESHOLD = 1
   }
 }

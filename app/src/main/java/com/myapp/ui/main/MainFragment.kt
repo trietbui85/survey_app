@@ -41,10 +41,7 @@ class MainFragment : DaggerFragment() {
     override fun onPageSelected(position: Int) {
       super.onPageSelected(position)
       Timber.d("page change = ${position}/${surveyAdapter.itemCount}")
-      viewModel.setViewPagerSelectedIndex(position)
-      if (position == surveyAdapter.itemCount - 1) {
-        viewModel.loadNextPage()
-      }
+      viewModel.onScrollToPage(position, surveyAdapter.itemCount)
     }
   }
 
