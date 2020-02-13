@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myapp.data.repo.DataException
-import com.myapp.data.repo.Result
 import com.myapp.data.repo.SurveyItem
 import com.myapp.data.repo.SurveyRepository
 import com.myapp.utils.CollectionUtils.merge2List
@@ -91,7 +90,7 @@ class MainViewModel @Inject constructor(
             _loadingMoreLiveData.value = false
           }
         }.onEach { result ->
-          if (result.status == Result.Status.SUCCESS) {
+          if (result.isSuccess()) {
             Timber.d("There are ${_contentLiveData.value?.size} existing items, and ${result.data?.size} new items")
 
             if (result.data.isNullOrEmpty()) {
@@ -106,7 +105,7 @@ class MainViewModel @Inject constructor(
               }
             }
 
-          } else if (result.status == Result.Status.ERROR) {
+          } else if (result.isError()) {
             _errorLiveEvent.value = LiveEvent(result.exception!!)
             // error means fetching is not successful, thus we must revert currentPage
             currentPage--

@@ -46,7 +46,7 @@ class SurveyRepositoryImplTest : CoroutinesTest() {
     val flow = surveyRepository.loadSurveys(1, 2)
 
     flow.collect {
-      assertThat(it.status).isEqualTo(Result.Status.SUCCESS)
+      assertThat(it.isSuccess()).isTrue()
       assertThat(it.data).isEqualTo(listOf(testSurveyItem, testSurveyItem2))
       assertThat(it.exception).isNull()
     }
@@ -65,7 +65,7 @@ class SurveyRepositoryImplTest : CoroutinesTest() {
     val flow = surveyRepository.loadSurveys(1, 2)
 
     flow.collect {
-      assertThat(it.status).isEqualTo(Result.Status.ERROR)
+      assertThat(it.isError()).isTrue()
       assertThat(it.data).isNull()
       assertThat(it.exception).isEqualTo(DataException(400, "Bad request"))
     }
