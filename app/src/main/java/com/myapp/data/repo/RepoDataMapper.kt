@@ -1,60 +1,37 @@
 package com.myapp.data.repo
 
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.remote.model.AccessTokenResponse
 import com.myapp.data.remote.model.SurveyResponse
-import timber.log.Timber
 import javax.inject.Inject
 
 class SurveyItemMapper @Inject constructor() {
 
   fun fromSurveyResponse(response: SurveyResponse) = SurveyItem(
-      id = response.id,
-      title = response.title,
-      description = response.description,
-      coverImageUrl = response.coverImageUrl
+    id = response.id,
+    title = response.title,
+    description = response.description,
+    coverImageUrl = response.coverImageUrl
   )
 }
 
-class AccountItemMapper @Inject constructor(private val gson: Gson) {
-  fun fromAccessTokenResponse(response: AccessTokenResponse) = AccessTokenItem(
-      accessToken = response.accessToken,
-      tokenType = response.tokenType,
-      createdAt = response.createdAt,
-      expiresIn = response.expiresIn
-  )
+class AccountItemMapper() {
+  fun fromAccessTokenResponse(response: AccessTokenResponse) = AccessTokenItem(response.accessToken)
 
-  fun fromAccessTokenEntity(entity: AccessTokenEntity) = AccessTokenItem(
-      accessToken = entity.accessToken,
-      tokenType = entity.tokenType,
-      createdAt = entity.createdAt,
-      expiresIn = entity.expiresIn
-  )
+  fun fromAccessTokenEntity(entity: AccessTokenEntity) = AccessTokenItem(entity.accessToken)
 
   fun toAccessTokenEntity(item: AccessTokenItem) =
-    AccessTokenEntity(
-        accessToken = item.accessToken,
-        tokenType = item.tokenType,
-        createdAt = item.createdAt,
-        expiresIn = item.expiresIn
-    )
+    AccessTokenEntity(item.accessToken)
 
   // Convert an AccessTokenEntity to JSON text
-  fun fromAccessTokenEntityToString(entity: AccessTokenEntity): String = gson.toJson(entity)
+  fun fromAccessTokenEntityToString(entity: AccessTokenEntity): String = entity.accessToken
 
   // Convert JSON text to an instance of AccessTokenEntity, or null
-  fun fromStringToAccessTokenEntity(jsonToken: String?): AccessTokenEntity? {
-    if (jsonToken.isNullOrBlank()) {
+  fun fromStringToAccessTokenEntity(token: String?): AccessTokenEntity? {
+    if (token.isNullOrBlank()) {
       return null
     }
-    return try {
-      gson.fromJson(jsonToken, AccessTokenEntity::class.java)
-    } catch (e: JsonSyntaxException) {
-      Timber.e("fromStringToAccessTokenEntity failed: $e, json=$jsonToken")
-      null
-    }
+    return AccessTokenEntity(token)
   }
 
 }

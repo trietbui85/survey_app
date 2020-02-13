@@ -15,11 +15,8 @@ data class SurveyItem(
 }
 
 data class AccessTokenItem(
-  val accessToken: String = "",
-  val tokenType: String = "",
-  val expiresIn: Int = 0,
-  val createdAt: Int = 0
+  val accessToken: String = ""
 ) {
   // Get the Bearer Token from an accessToken
-  val bearerToken = "Bearer ${this.accessToken}"
+  val bearerToken = if (accessToken.isBlank()) "" else "Bearer ${this.accessToken}"
 }
