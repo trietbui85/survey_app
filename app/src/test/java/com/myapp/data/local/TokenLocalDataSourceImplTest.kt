@@ -6,7 +6,6 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.myapp.data.local.db.AccessTokenEntity
 import com.myapp.data.repo.AccountItemMapper
-import com.myapp.di.NetworkModule.Companion.DEFAULT_GSON
 import com.myapp.ui.SurveyApp
 import com.myapp.utils.TestData.testJsonToken
 import com.myapp.utils.TestData.testTokenEntity
@@ -35,7 +34,7 @@ class TokenLocalDataSourceImplTest {
   fun setUp() {
     val app = ApplicationProvider.getApplicationContext() as SurveyApp
     pref = app.getSharedPreferences("survey", Context.MODE_PRIVATE)
-    dataSource = TokenLocalDataSourceImpl(pref, mapper = AccountItemMapper(DEFAULT_GSON))
+    dataSource = TokenLocalDataSourceImpl(pref, mapper = AccountItemMapper())
 
     Dispatchers.setMain(testDispatcher)
   }
@@ -53,6 +52,10 @@ class TokenLocalDataSourceImplTest {
   }
 
   private fun setTextDataForSharedPref(text: String?) {
+    if (text.isNullOrBlank()) {
+      clearTextDataForSharedPref()
+      return
+    }
     pref.edit()
       .putString(TokenLocalDataSource.KEY_ACCESS_TOKEN, text)
       .apply()
@@ -80,19 +83,12 @@ class TokenLocalDataSourceImplTest {
   }
 
   @Test
-  fun loadTokenFromCache_InvalidDataInSharedPref_ReturnNull() = runBlockingTest(testDispatcher) {
-    setTextDataForSharedPref("{xx}")
-    val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
-    assertThat(entity).isNull()
-  }
-
-  @Test
   fun loadTokenFromCache_ValidDataInSharedPref_ReturnSuccess() = runBlockingTest(testDispatcher) {
-    setTextDataForSharedPref(testJsonToken)
+    setTextDataForSharedPref("123")
     val entity: AccessTokenEntity? = dataSource.loadTokenFromCache()
 
     assertThat(entity).isNotNull()
-    assertThat(entity).isEqualTo(testTokenEntity)
+    assertThat(entity!!.accessToken).isEqualTo("123")
   }
 
   @Test

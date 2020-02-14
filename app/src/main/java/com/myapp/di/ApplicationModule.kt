@@ -2,7 +2,6 @@ package com.myapp.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.gson.Gson
 import com.myapp.data.local.TokenLocalDataSource
 import com.myapp.data.local.TokenLocalDataSourceImpl
 import com.myapp.data.remote.SurveyApiService
@@ -68,7 +67,7 @@ class ApplicationModule {
 
   @Singleton
   @Provides
-  fun provideAccountDataMapper(gson: Gson): AccountItemMapper = AccountItemMapper(gson)
+  fun provideAccountDataMapper(): AccountItemMapper = AccountItemMapper()
 
   @Singleton
   @Provides
